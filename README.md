@@ -33,12 +33,13 @@ CoffeeCompanion is your go-to mobile app for finding nearby coffee shops!
 4. Set up environment variables:
    Create a `.env` file in the root directory by following the `.env.template` which contains the following:
    ```
-    FIREBASE_API_KEY=<your_firebase_api_key>
-    FIREBASE_AUTH_DOMAIN=<your_firebase_auth_domain>
-    FIREBASE_PROJECT_ID=<your_firebase_project_id>
-    FIREBASE_STORAGE_BUCKET=<your_firebase_storage_bucket>
-    FIREBASE_MESSAGING_SENDER_ID=<your_firebase_sender_id>
-    FIREBASE_APP_ID=<your_firebase_app_id>
+   FIREBASE_API_KEY=<your_firebase_api_key>
+   FIREBASE_AUTH_DOMAIN=<your_firebase_auth_domain>
+   FIREBASE_PROJECT_ID=<your_firebase_project_id>
+   FIREBASE_STORAGE_BUCKET=<your_firebase_storage_bucket>
+   FIREBASE_MESSAGING_SENDER_ID=<your_firebase_sender_id>
+   FIREBASE_APP_ID=<your_firebase_app_id>
+   FOURSQUARE_API_KEY=<your_foursquare_api_key>
    ```
 5. Start the development server:
    ```bash
@@ -69,6 +70,7 @@ CoffeeCompanion is built using the following technologies:
 - **Formik**: A library for building forms in React with ease.
 - **Yup**: A schema validation library for Formik to handle form validations.
 - **React Navigation**: A routing and navigation library for React Native.
+- **React Native Dotenv**: Babel plugin for injecting environment variables into JS environment.
 - **React Native Maps**: A library for displaying maps in React Native applications.
 - **React Native Vector Icons**: A library that provides customizable icons for React Native.
 - **Async Storage**: Storage system for React Native.
