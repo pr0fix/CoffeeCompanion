@@ -23,6 +23,7 @@ const signupValidationSchema = yup.object().shape({
 });
 
 const SignUpForm = ({ navigation }) => {
+  const [loading, setLoading] = useState("")
   const [error, setError] = useState("");
 
   // Creates an account with email and password
@@ -30,6 +31,7 @@ const SignUpForm = ({ navigation }) => {
     const { email, password } = values;
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      console.log("signin up")
       navigation.navigate("Home");
     } catch (error) {
       setError(error.message);

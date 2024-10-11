@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { View, TextInput, Text, Pressable, StyleSheet } from "react-native";
-import { auth } from "../api/firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import * as yup from "yup";
 import { Formik } from "formik";
+import useSignIn from "../hooks/useSignIn";
 
 // Validator for fields in login form
 const loginValidationSchema = yup.object().shape({
@@ -12,25 +10,14 @@ const loginValidationSchema = yup.object().shape({
 });
 
 const LoginForm = ({ navigation }) => {
-  const [error, setError] = useState("");
-
-  // Logs user in with email and password
-  const handleLogin = async (values) => {
-    const { email, password } = values;
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigation.navigate("Home");
-    } catch (error) {
-      setError(error.message);
-    }
-  };
+  const { handleSignIn, error } = useSignIn();
 
   return (
     <View>
       <Formik
         validationSchema={loginValidationSchema}
         initialValues={{ email: "", password: "" }}
-        onSubmit={handleLogin}
+        onSubmit={(values) => handleSignIn(values.email, values.password)}
       >
         {({
           handleChange,
