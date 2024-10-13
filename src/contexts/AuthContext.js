@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 
 // Create the context
@@ -34,8 +35,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const signUp = async (email, password) => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      throw error;
+    }
+  };
+
   // Function to sign out a user
-  const logout = async () => {
+  // not in camelCase since firebase/auth has a method called signOut
+  const signout = async () => {
     try {
       await signOut(auth);
     } catch (error) {
@@ -44,7 +54,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, logout }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signout }}>
       {children}
     </AuthContext.Provider>
   );

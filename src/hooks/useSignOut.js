@@ -1,21 +1,21 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
-const useLogOut = () => {
+const useSignOut = () => {
   const [error, setError] = useState(null);
-  const { logout } = useAuth();
+  const { signout } = useAuth();
 
-  const handleLogOut = async () => {
+  const handleSignOut = async () => {
     try {
       setError(null);
-      await logout();
+      await signout();
       console.log("logged out");
     } catch (err) {
       setError(err.message);
     }
   };
 
-  return { handleLogOut, error };
+  return { handleSignOut, error };
 };
 
-export default useLogOut;
+export default useSignOut;

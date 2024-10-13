@@ -1,9 +1,14 @@
-import { useState } from "react";
-import { View, TextInput, Text, Pressable, StyleSheet } from "react-native";
-import { auth } from "../api/firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  View,
+  TextInput,
+  Text,
+  Pressable,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import * as yup from "yup";
 import { Formik } from "formik";
+import useSignUp from "../hooks/useSignUp";
 
 // Validator for fields in sign up form
 const signupValidationSchema = yup.object().shape({
@@ -23,26 +28,14 @@ const signupValidationSchema = yup.object().shape({
 });
 
 const SignUpForm = ({ navigation }) => {
-  const [loading, setLoading] = useState("")
-  const [error, setError] = useState("");
+  const { handleSignUp, error, loading } = useSignUp();
 
-  // Creates an account with email and password
-  const handleSignUp = async (values) => {
-    const { email, password } = values;
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      console.log("signin up")
-      navigation.navigate("Home");
-    } catch (error) {
-      setError(error.message);
-    }
-  };
   return (
     <View>
       <Formik
         validationSchema={signupValidationSchema}
         initialValues={{ email: "", password: "", passwordConfirm: "" }}
-        onSubmit={handleSignUp}
+        onSubmit={(values) => handleSignUp(values.email, values.password)}
       >
         {({
           handleChange,
@@ -100,11 +93,24 @@ const SignUpForm = ({ navigation }) => {
             )}
 
             <Pressable style={styles.inputButton} onPress={handleSubmit}>
-              <Text style={styles.inputButtonText}>Sign up</Text>
+              {loading ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text style={styles.inputButtonText}>Sign up</Text>
+              )}
+            </Pressable>
+            <Pressable
+              style={styles.signInButton}
+              onPress={() => navigation.navigate("Sign In")}
+            >
+              <Text style={styles.signInButtonText}>
+                Already have an account? Sign In
+              </Text>
             </Pressable>
           </View>
         )}
       </Formik>
+      {error ? <Text>{error}</Text> : null}
     </View>
   );
 };
@@ -135,6 +141,15 @@ const styles = StyleSheet.create({
   },
   inputButtonText: {
     color: "white",
+    fontWeight: "bold",
+  },
+  signInButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  signInButtonText: {
+    color: "#0366d6",
     fontWeight: "bold",
   },
 });

@@ -1,11 +1,11 @@
 import { StyleSheet, View } from "react-native";
-import LoginForm from "../components/LoginForm";
+import SignInForm from "../components/SignInForm";
 
-// Screen that renders the LoginForm component
-const LoginScreen = ({ navigation }) => {
+// Screen that renders the SignInForm component
+const SignInScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <LoginForm navigation={navigation} />
+      <SignInForm navigation={navigation} />
     </View>
   );
 };
@@ -18,4 +18,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default SignInScreen;

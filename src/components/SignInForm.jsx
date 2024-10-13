@@ -1,21 +1,28 @@
-import { View, TextInput, Text, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  TextInput,
+  Text,
+  Pressable,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import * as yup from "yup";
 import { Formik } from "formik";
 import useSignIn from "../hooks/useSignIn";
 
-// Validator for fields in login form
-const loginValidationSchema = yup.object().shape({
+// Validator for fields in sign in form
+const signInValidationSchema = yup.object().shape({
   email: yup.string().required("Email is required"),
   password: yup.string().required("Password is required"),
 });
 
-const LoginForm = ({ navigation }) => {
-  const { handleSignIn, error } = useSignIn();
+const SignInForm = ({ navigation }) => {
+  const { handleSignIn, error, loading } = useSignIn();
 
   return (
     <View>
       <Formik
-        validationSchema={loginValidationSchema}
+        validationSchema={signInValidationSchema}
         initialValues={{ email: "", password: "" }}
         onSubmit={(values) => handleSignIn(values.email, values.password)}
       >
@@ -58,7 +65,11 @@ const LoginForm = ({ navigation }) => {
             )}
 
             <Pressable style={styles.inputButton} onPress={handleSubmit}>
-              <Text style={styles.inputButtonText}>Sign in</Text>
+              {loading ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text style={styles.inputButtonText}>Sign in</Text>
+              )}
             </Pressable>
 
             <Pressable
@@ -117,4 +128,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginForm;
+export default SignInForm;

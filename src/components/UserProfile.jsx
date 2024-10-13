@@ -1,12 +1,12 @@
 import { Button, Text } from "react-native";
-import useLogOut from "../hooks/useLogOut";
+import useSignOut from "../hooks/useSignOut";
 const UserProfile = () => {
-  const { handleLogOut, error } = useLogOut();
+  const { handleSignOut, error } = useSignOut();
 
   return (
     <>
       <Text>hello world</Text>
-      <Button title="log out" onPress={handleLogOut} />
+      <Button title="sign out" onPress={handleSignOut} />
       {error && <Text style={{ color: "red" }}>{error}</Text>}
     </>
   );

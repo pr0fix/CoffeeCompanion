@@ -1,14 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../api/firebaseConfig";
-import LoginScreen from "../screens/LoginScreen";
+import SignInScreen from "../screens/SignInScreen";
 import HomeScreen from "../screens/HomeScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import Icon from "react-native-vector-icons/Ionicons";
-import { useEffect, useState } from "react";
 import UserProfileScreen from "../screens/UserProfileScreen";
+import { useAuth } from "../contexts/AuthContext";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -17,7 +15,7 @@ const Stack = createStackNavigator();
 const AuthStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Login"
+      initialRouteName="Sign In"
       screenOptions={{
         headerStyle: {
           backgroundColor: "white",
@@ -27,9 +25,9 @@ const AuthStack = () => {
       }}
     >
       <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{ title: "Login" }}
+        name="Sign In"
+        component={SignInScreen}
+        options={{ title: "Sign In" }}
       />
       <Stack.Screen
         name="Sign Up"
@@ -42,20 +40,7 @@ const AuthStack = () => {
 
 // Main bottom tabs navigator
 const AppNavigator = () => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
-    });
-    return unsubscribe;
-  }, []);
+  const { user, loading } = useAuth();
 
   if (loading) return null;
 
@@ -102,7 +87,7 @@ const AppNavigator = () => {
                   <Icon name="log-in-outline" color={color} size={size} />
                 ),
                 headerShown: false,
-                title: "Login",
+                title: "Sign In",
               }}
             />
           </>

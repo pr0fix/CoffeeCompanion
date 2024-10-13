@@ -1,24 +1,23 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
-const useSignIn = () => {
+const useSignUp = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { signIn } = useAuth();
+  const { signUp } = useAuth();
 
-  const handleSignIn = async (email, password) => {
+  const handleSignUp = async (email, password) => {
     try {
       setLoading(true);
       setError(null);
-      await signIn(email, password);
+      await signUp(email, password);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
-
-  return { handleSignIn, error, loading };
+  return { handleSignUp, error, loading };
 };
 
-export default useSignIn;
+export default useSignUp;
