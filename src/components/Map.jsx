@@ -1,8 +1,28 @@
 import { useEffect, useState } from "react";
 import { Alert, Linking, StyleSheet, View } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import { Marker } from "react-native-maps";
+import MapView from "react-native-map-clustering";
 import * as Location from "expo-location";
 import fetchCoffeeShops from "../api/fetchCoffeeShops";
+
+// Removes any default POIs and markings that come with Google Maps
+const customMapStyle = [
+  {
+    featureType: "poi",
+    elementType: "labels",
+    stylers: [{ visibility: "off" }],
+  },
+  {
+    featureType: "transit",
+    elementType: "labels",
+    stylers: [{ visibility: "off" }],
+  },
+  {
+    featureType: "road",
+    elementType: "labels.icon",
+    stylers: [{ visibility: "off" }],
+  },
+];
 
 const Map = () => {
   const [region, setRegion] = useState({
@@ -77,9 +97,12 @@ const Map = () => {
     <View>
       <MapView
         style={styles.map}
+        customMapStyle={customMapStyle}
+        provider="google"
         loadingEnabled={true}
         region={region}
         showsUserLocation={true}
+        clusterColor="#A87544"
       >
         {coffeeShops.map((shop, index) => (
           <Marker
