@@ -4,7 +4,7 @@ import { FOURSQUARE_BASE_URL, headers } from "./foursquareConfig";
 // Fetch coffee shops from Foursquare Places API
 const fetchCoffeeShops = async (latitude, longitude) => {
   try {
-    const response = await axios.get(`${FOURSQUARE_BASE_URL}`, {
+    const response = await axios.get(`${FOURSQUARE_BASE_URL}/search`, {
       headers,
       params: {
         ll: `${latitude},${longitude}`,

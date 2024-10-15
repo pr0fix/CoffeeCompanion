@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
-import { Alert, Linking, StyleSheet, View } from "react-native";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Alert, Linking, SafeAreaView, StyleSheet, View } from "react-native";
 import { Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import * as Location from "expo-location";
 import fetchCoffeeShops from "../api/fetchCoffeeShops";
+import fetchCoffeeShopPhotos from "../api/fetchCoffeeShopPhotos";
+import CoffeeShopBottomSheet from "./CoffeeShopBottomSheet";
 
 // Removes any default POIs and markings that come with Google Maps
 const customMapStyle = [
@@ -32,6 +34,9 @@ const Map = () => {
     longitudeDelta: 0.0221,
   });
   const [coffeeShops, setCoffeeShops] = useState([]);
+  const [selectedShop, setSelectedShop] = useState(null);
+  const bottomSheetRef = useRef(null);
+  const snapPoints = useMemo(() => ["25%", "50%", "75%"], []);
 
   // Request user location permission
   const requestLocationPermission = async () => {
@@ -81,7 +86,14 @@ const Map = () => {
         userLocation.longitude
       );
 
-      setCoffeeShops(shops);
+      const shopsWithPhotos = await Promise.all(
+        shops.map(async (shop) => {
+          const photos = await fetchCoffeeShopPhotos(shop.fsq_id);
+          return { ...shop, photos };
+        })
+      );
+
+      setCoffeeShops(shopsWithPhotos);
     } catch (err) {
       console.error("Error fetching location", err);
     }
@@ -92,31 +104,44 @@ const Map = () => {
     getCoffeeShops();
   }, []);
 
+  const handleMarkerPress = async (shop) => {
+    setSelectedShop(shop);
+    bottomSheetRef.current?.snapToIndex(1);
+  };
+
   // Return map with user and coffee shops nearby
   return (
-    <View>
-      <MapView
-        style={styles.map}
-        customMapStyle={customMapStyle}
-        provider="google"
-        loadingEnabled={true}
-        region={region}
-        showsUserLocation={true}
-        clusterColor="#A87544"
-      >
-        {coffeeShops.map((shop, index) => (
-          <Marker
-            key={index}
-            coordinate={{
-              latitude: shop.geocodes.main.latitude,
-              longitude: shop.geocodes.main.longitude,
-            }}
-            title={shop.name}
-            description={shop.location.address || "No address available"}
-          />
-        ))}
-      </MapView>
-    </View>
+    <SafeAreaView>
+      <View>
+        <MapView
+          style={styles.map}
+          customMapStyle={customMapStyle}
+          provider="google"
+          loadingEnabled={true}
+          region={region}
+          showsUserLocation={true}
+          clusterColor="#A87544"
+        >
+          {coffeeShops.map((shop) => (
+            <Marker
+              key={shop.fsq_id}
+              coordinate={{
+                latitude: shop.geocodes.main.latitude,
+                longitude: shop.geocodes.main.longitude,
+              }}
+              title={shop.name}
+              description={shop.location.address || "No address available"}
+              onPress={() => handleMarkerPress(shop)}
+            />
+          ))}
+        </MapView>
+      </View>
+      <CoffeeShopBottomSheet
+        selectedShop={selectedShop}
+        bottomSheetRef={bottomSheetRef}
+        snapPoints={snapPoints}
+      />
+    </SafeAreaView>
   );
 };
 
