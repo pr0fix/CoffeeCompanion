@@ -5,10 +5,12 @@ import {
   FIREBASE_STORAGE_BUCKET,
   FIREBASE_MESSAGING_SENDER_ID,
   FIREBASE_APP_ID,
+  FIREBASE_DB_URL,
 } from "@env";
 import { initializeApp } from "firebase/app";
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getDatabase } from "firebase/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
@@ -18,6 +20,7 @@ const firebaseConfig = {
   storageBucket: FIREBASE_STORAGE_BUCKET,
   messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
   appId: FIREBASE_APP_ID,
+  databaseURL: FIREBASE_DB_URL,
 };
 
 const app = initializeApp(firebaseConfig);
@@ -25,5 +28,6 @@ const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
 const firestore = getFirestore(app);
+const database = getDatabase(app);
 
-export { auth, firestore };
+export { auth, firestore, database };

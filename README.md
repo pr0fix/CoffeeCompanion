@@ -42,6 +42,7 @@ CoffeeCompanion is your go-to mobile app for finding nearby coffee shops!
    FIREBASE_STORAGE_BUCKET=<your_firebase_storage_bucket>
    FIREBASE_MESSAGING_SENDER_ID=<your_firebase_sender_id>
    FIREBASE_APP_ID=<your_firebase_app_id>
+   FIREBASE_DB_URL=<your_firebase_realtime_db_url>
    FOURSQUARE_API_KEY=<your_foursquare_api_key>
    ```
 5. Start the development server:
