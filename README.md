@@ -83,6 +83,7 @@ CoffeeCompanion is built using the following technologies:
 - **React Native Maps**: A library for displaying maps in React Native applications.
 - **React Native Vector Icons**: A library that provides customizable icons for React Native.
 - **React Native Map Clustering**: React Native module that handles map marker clustering.
+- **React Native Bottom Sheet**: A performant interactive bottom sheet with fully configurable options
 - **Async Storage**: Storage system for React Native.
 
 These technologies work together to create a seamless and efficient user experience in finding nearby coffee shops.

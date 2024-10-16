@@ -5,7 +5,6 @@ const HomeScreen = () => {
   return (
     <View>
       <Map />
-      {/* add bottomsheet component later */}
     </View>
   );
 };
