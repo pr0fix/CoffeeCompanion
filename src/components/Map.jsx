@@ -127,6 +127,7 @@ const Map = () => {
           loadingEnabled={true}
           region={region}
           showsUserLocation={true}
+          toolbarEnabled={false}
           clusterColor="#A87544"
         >
           {coffeeShops.map((shop) => (
