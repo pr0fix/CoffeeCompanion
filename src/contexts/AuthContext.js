@@ -6,7 +6,7 @@ import {
   signOut,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { push, ref, set } from "firebase/database";
+import {onValue, push, ref, set } from "firebase/database";
 
 // Create the context
 const AuthContext = createContext();
@@ -15,12 +15,18 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [reviews, setReviews] = useState([]);
 
   // Listen for authentication state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
+      if (user) {
+        getReviews(user.uid);
+      } else {
+        setReviews([]);
+      }
     });
 
     // Clean up subscription on unmount
@@ -55,15 +61,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const addReview = async (shopId, reviewText) => {
+  const addReview = async (shopId, shopName, address, reviewText) => {
     try {
       if (user) {
         const reviewRef = ref(database, `users/${user.uid}/reviews`);
         const newReviewRef = push(reviewRef);
         await set(newReviewRef, {
           shopId,
+          shopName,
+          address,
           text: reviewText,
-          createdAt: new Date().toISOString(),
+          createdAt: new Date().toLocaleDateString(),
         });
         console.log("Review added successfully");
       }
@@ -72,11 +80,28 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getReviews = async (userId) => {
+    const reviewsRef = ref(database, `users/${userId}/reviews`);
+    onValue(reviewsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const reviewsArray = Object.entries(data).map(([id, review]) => ({
+          id,
+          ...review,
+        }));
+        setReviews(reviewsArray);
+      } else {
+        setReviews([]);
+      }
+    });
+  };
+
   return (
     <AuthContext.Provider
       value={{
         user,
         loading,
+        reviews,
         signIn,
         signUp,
         signout,

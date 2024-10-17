@@ -22,7 +22,12 @@ const ReviewForm = ({ selectedShop, setReviewFormVisible }) => {
   const handleReviewSubmit = async (values) => {
     setLoading(true);
     try {
-      await addReview(selectedShop.fsq_id, values.reviewText);
+      await addReview(
+        selectedShop.fsq_id,
+        selectedShop.name,
+        selectedShop.location.address || "No address available.",
+        values.reviewText
+      );
       setReviewFormVisible(false);
     } catch (error) {
       console.error("Error submitting review:", error);

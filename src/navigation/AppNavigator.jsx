@@ -7,9 +7,36 @@ import SignUpScreen from "../screens/SignUpScreen";
 import Icon from "react-native-vector-icons/Ionicons";
 import UserProfileScreen from "../screens/UserProfileScreen";
 import { useAuth } from "../contexts/AuthContext";
+import EditProfileScreen from "../screens/EditProfileScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+
+const ProfileStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="Profile"
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "white",
+          elevation: 0,
+          shadowOpacity: 0,
+        },
+      }}
+    >
+      <Stack.Screen
+        name="Profile"
+        component={UserProfileScreen}
+        options={{ title: "Profile" }}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfileScreen}
+        options={{ title: "Edit Profile" }}
+      />
+    </Stack.Navigator>
+  );
+};
 
 // Navigation stack for sign in and sign up
 const AuthStack = () => {
@@ -59,12 +86,14 @@ const AppNavigator = () => {
               }}
             />
             <Tab.Screen
-              name="Profile"
-              component={UserProfileScreen}
+              name="ProfileStack"
+              component={ProfileStack}
               options={{
                 tabBarIcon: ({ color, size }) => (
                   <Icon name="person" color={color} size={size} />
                 ),
+                headerShown: false,
+                title: "Profile",
               }}
             />
           </>
