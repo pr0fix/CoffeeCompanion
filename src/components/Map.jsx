@@ -111,10 +111,19 @@ const Map = () => {
     fetchData();
   }, []);
 
+  // Ensure the bottom sheet opens when a marker is pressed for the first time
+  useEffect(() => {
+    if (selectedShop && bottomSheetRef.current) {
+      // Had to add timeout since it wasn't opening on the first press without it
+      setTimeout(() => {
+        bottomSheetRef.current.snapToIndex(0);
+      }, 50);
+    }
+  }, [selectedShop]);
+
   // Handle marker press to show the bottom sheet
   const handleMarkerPress = (shop) => {
     setSelectedShop(shop);
-    bottomSheetRef.current?.snapToIndex(0);
   };
 
   return (
