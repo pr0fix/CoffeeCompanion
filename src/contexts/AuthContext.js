@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { auth } from "../api/firebaseConfig";
+import { auth, database } from "../api/firebaseConfig";
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
+import { push, ref, set } from "firebase/database";
 
 // Create the context
 const AuthContext = createContext();
@@ -54,8 +55,34 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const addReview = async (shopId, reviewText) => {
+    try {
+      if (user) {
+        const reviewRef = ref(database, `users/${user.uid}/reviews`);
+        const newReviewRef = push(reviewRef);
+        await set(newReviewRef, {
+          shopId,
+          text: reviewText,
+          createdAt: new Date().toISOString(),
+        });
+        console.log("Review added successfully");
+      }
+    } catch (error) {
+      console.error("Error adding review:", error);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signUp, signout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        signIn,
+        signUp,
+        signout,
+        addReview,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

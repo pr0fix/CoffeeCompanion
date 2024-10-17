@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
-import { Alert, Linking, StyleSheet, View } from "react-native";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Alert, Linking, SafeAreaView, StyleSheet, View } from "react-native";
 import { Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import * as Location from "expo-location";
 import fetchCoffeeShops from "../api/fetchCoffeeShops";
+import fetchCoffeeShopPhotos from "../api/fetchCoffeeShopPhotos";
+import CoffeeShopBottomSheet from "./CoffeeShopBottomSheet";
 
 // Removes any default POIs and markings that come with Google Maps
 const customMapStyle = [
@@ -24,99 +26,139 @@ const customMapStyle = [
   },
 ];
 
+// Initial region for the map
+const initialRegion = {
+  latitude: 60.170675,
+  longitude: 24.941488,
+  latitudeDelta: 0.0322,
+  longitudeDelta: 0.0221,
+};
+
+// Request location permissions from the user
+const requestLocationPermission = async () => {
+  const { status } = await Location.requestForegroundPermissionsAsync();
+  if (status === "granted") {
+    return true;
+  }
+
+  if (status === "denied") {
+    Alert.alert(
+      "Location Access Required",
+      "Without location permissions, CoffeeCompanion won't be able to show nearby coffee shops on the map. Please enable location access in your settings.",
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Open Settings", onPress: () => Linking.openSettings() },
+      ]
+    );
+  }
+  return false;
+};
+
+//  Get the user's current location
+const getUserLocation = async () => {
+  const location = await Location.getCurrentPositionAsync();
+  return {
+    latitude: location.coords.latitude,
+    longitude: location.coords.longitude,
+  };
+};
+
+// Fetch coffee shops with photos from the Foursquare API
+const getCoffeeShopsWithPhotos = async (latitude, longitude) => {
+  const shops = await fetchCoffeeShops(latitude, longitude);
+  if (shops) {
+    return Promise.all(
+      shops.map(async (shop) => {
+        const photos = await fetchCoffeeShopPhotos(shop.fsq_id);
+        return { ...shop, photos };
+      })
+    );
+  }
+};
+
+// Map component
 const Map = () => {
-  const [region, setRegion] = useState({
-    latitude: 60.170675,
-    longitude: 24.941488,
-    latitudeDelta: 0.0322,
-    longitudeDelta: 0.0221,
-  });
+  const [region, setRegion] = useState(initialRegion);
   const [coffeeShops, setCoffeeShops] = useState([]);
+  const [selectedShop, setSelectedShop] = useState(null);
+  const bottomSheetRef = useRef(null);
+  const snapPoints = useMemo(() => ["25%", "50%", "75%"], []);
 
-  // Request user location permission
-  const requestLocationPermission = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status === "granted") {
-      return true;
-    }
-
-    if (status === "denied") {
-      Alert.alert(
-        "Location Access Required",
-        "Without location permissions, CoffeeCompanion won't be able to show nearby coffee shops on the map. Please enable location access in your settings.",
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-          {
-            text: "Open Settings",
-            onPress: () => Linking.openSettings(),
-          },
-        ]
-      );
-    }
-    return false;
-  };
-
-  // Fetch coffee shops
-  const getCoffeeShops = async () => {
-    try {
-      const hasPermission = await requestLocationPermission();
-      if (!hasPermission) return;
-
-      const location = await Location.getCurrentPositionAsync();
-      const userLocation = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      };
-      setRegion({
-        latitude: userLocation.latitude,
-        longitude: userLocation.longitude,
-        latitudeDelta: 0.0322,
-        longitudeDelta: 0.0221,
-      });
-      const shops = await fetchCoffeeShops(
-        userLocation.latitude,
-        userLocation.longitude
-      );
-
-      setCoffeeShops(shops);
-    } catch (err) {
-      console.error("Error fetching location", err);
-    }
-  };
-
-  // Fetch coffee shops and user location on component mount
+  // Fetch user location and coffee shops with photos on component mount
   useEffect(() => {
-    getCoffeeShops();
+    const fetchData = async () => {
+      try {
+        const hasPermission = await requestLocationPermission();
+        if (!hasPermission) return;
+
+        const userLocation = await getUserLocation();
+        setRegion({
+          ...userLocation,
+          latitudeDelta: 0.0322,
+          longitudeDelta: 0.0221,
+        });
+
+        const shopsWithPhotos = await getCoffeeShopsWithPhotos(
+          userLocation.latitude,
+          userLocation.longitude
+        );
+        setCoffeeShops(shopsWithPhotos);
+      } catch (err) {
+        console.error("Error fetching location or coffee shops", err);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  // Return map with user and coffee shops nearby
+  // Ensure the bottom sheet opens when a marker is pressed for the first time
+  useEffect(() => {
+    if (selectedShop && bottomSheetRef.current) {
+      // Had to add timeout since it wasn't opening on the first press without it
+      setTimeout(() => {
+        bottomSheetRef.current.snapToIndex(0);
+      }, 50);
+    }
+  }, [selectedShop]);
+
+  // Handle marker press to show the bottom sheet
+  const handleMarkerPress = (shop) => {
+    setSelectedShop(shop);
+  };
+
   return (
-    <View>
-      <MapView
-        style={styles.map}
-        customMapStyle={customMapStyle}
-        provider="google"
-        loadingEnabled={true}
-        region={region}
-        showsUserLocation={true}
-        clusterColor="#A87544"
-      >
-        {coffeeShops.map((shop, index) => (
-          <Marker
-            key={index}
-            coordinate={{
-              latitude: shop.geocodes.main.latitude,
-              longitude: shop.geocodes.main.longitude,
-            }}
-            title={shop.name}
-            description={shop.location.address || "No address available"}
-          />
-        ))}
-      </MapView>
-    </View>
+    <SafeAreaView>
+      <View>
+        <MapView
+          style={styles.map}
+          customMapStyle={customMapStyle}
+          provider="google"
+          loadingEnabled={true}
+          region={region}
+          showsUserLocation={true}
+          toolbarEnabled={false}
+          clusterColor="#A87544"
+        >
+          {coffeeShops.map((shop) => (
+            <Marker
+              key={shop.fsq_id}
+              coordinate={{
+                latitude: shop.geocodes.main.latitude,
+                longitude: shop.geocodes.main.longitude,
+              }}
+              title={shop.name}
+              description={shop.location.address || "No address available"}
+              onPress={() => handleMarkerPress(shop)}
+            />
+          ))}
+        </MapView>
+      </View>
+      <CoffeeShopBottomSheet
+        selectedShop={selectedShop}
+        bottomSheetRef={bottomSheetRef}
+        snapPoints={snapPoints}
+      />
+    </SafeAreaView>
   );
 };
 
