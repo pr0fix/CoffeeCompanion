@@ -9,15 +9,7 @@ import {
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import useSignOut from "../hooks/useSignOut";
-
-const renderReviewItem = ({ item }) => (
-  <View style={styles.reviewCard}>
-    <Text style={styles.shopName}>{item.shopName}</Text>
-    <Text style={styles.shopAddress}>{item.address}</Text>
-    <Text style={styles.reviewDate}>{item.createdAt}</Text>
-    <Text style={styles.reviewText}>{item.text}</Text>
-  </View>
-);
+import ReviewItem from "./ReviewItem";
 
 const UserProfile = ({ navigation }) => {
   const { user, reviews } = useAuth();
@@ -40,12 +32,18 @@ const UserProfile = ({ navigation }) => {
     <View style={styles.profileContainer}>
       <Image style={styles.image} source={"source"} resizeMode={"cover"} />
       <Text>{user.email}</Text>
-      <Text style={styles.reviewHeader}>Your Reviews</Text>
-      <FlatList
-        style={{ width: "100%" }}
-        data={reviews}
-        renderItem={renderReviewItem}
-      />
+      {reviews && reviews.length > 0 ? (
+        <>
+          <Text style={styles.reviewHeader}>Your Reviews</Text>
+          <FlatList
+            style={{ width: "100%" }}
+            data={reviews}
+            renderItem={({ item }) => <ReviewItem item={item} />}
+          />
+        </>
+      ) : (
+        <Text style={styles.noReviewsHeader}>No reviews yet</Text>
+      )}
       <Pressable style={styles.signOutButton} onPress={handleSignOut}>
         <Text style={styles.signOutButtonText}>Sign Out</Text>
       </Pressable>
@@ -83,35 +81,11 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     alignSelf: "flex-start",
   },
-  reviewCard: {
-    margin: 10,
-    padding: 15,
-    backgroundColor: "#f8f8f8",
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
-  },
-  shopName: {
+  noReviewsHeader: {
+    fontSize: 20,
     fontWeight: "bold",
-    fontSize: 18,
-    marginBottom: 5,
-  },
-  shopAddress: {
-    fontStyle: "italic",
-    color: "#555",
-    marginBottom: 5,
-  },
-  reviewDate: {
-    color: "#555",
-    marginBottom: 5,
-  },
-  reviewText: {
-    marginTop: 5,
-    fontSize: 16,
-    lineHeight: 22,
+    marginTop: 20,
+    marginBottom: 20,
   },
   signOutButton: {
     marginTop: 5,
