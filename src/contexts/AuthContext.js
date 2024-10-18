@@ -6,7 +6,7 @@ import {
   signOut,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import {onValue, push, ref, set } from "firebase/database";
+import { off, onValue, push, ref, set } from "firebase/database";
 
 // Create the context
 const AuthContext = createContext();
@@ -39,15 +39,27 @@ export const AuthProvider = ({ children }) => {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
   // Function to sign up user
-  const signUp = async (email, password) => {
+  const signUp = async (fullName, email, password) => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      if (res.user) {
+        const userInfo = {
+          displayName: fullName,
+        };
+        const userInfoRef = ref(database, `users/${res.user.uid}/info`);
+        const newUserInfoRef = push(userInfoRef);
+        await set(newUserInfoRef, userInfo);
+      }
     } catch (error) {
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,6 +70,8 @@ export const AuthProvider = ({ children }) => {
       await signOut(auth);
     } catch (error) {
       console.error("Error signing out:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -77,6 +91,8 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error adding review:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -94,6 +110,8 @@ export const AuthProvider = ({ children }) => {
         setReviews([]);
       }
     });
+
+    return () => off(reviewsRef);
   };
 
   return (

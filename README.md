@@ -74,7 +74,6 @@ CoffeeCompanion is built using the following technologies:
 - **Expo**: A framework and platform for universal React applications.
 - **Foursquare Places API**: Used to fetch nearby coffee shops based on the user's location.
 - **Firebase**: For user authentication and data storage.
-- **Firestore**: For storing user reviews and coffee shop data.
 - **Axios**: For making API requests.
 - **Formik**: A library for building forms in React with ease.
 - **Yup**: A schema validation library for Formik to handle form validations.

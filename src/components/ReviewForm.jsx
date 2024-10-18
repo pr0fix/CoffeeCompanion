@@ -6,42 +6,31 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import { useAuth } from "../contexts/AuthContext";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useState } from "react";
+import useSubmitReview from "../hooks/useSubmitReview";
 
 const reviewValidationSchema = yup.object().shape({
   reviewText: yup.string().required("Review text is required"),
 });
 
 const ReviewForm = ({ selectedShop, setReviewFormVisible }) => {
-  const { addReview } = useAuth();
-  const [loading, setLoading] = useState(false);
-
-  const handleReviewSubmit = async (values) => {
-    setLoading(true);
-    try {
-      await addReview(
-        selectedShop.fsq_id,
-        selectedShop.name,
-        selectedShop.location.address || "No address available.",
-        values.reviewText
-      );
-      setReviewFormVisible(false);
-    } catch (error) {
-      console.error("Error submitting review:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { handleSubmitReview, loading } = useSubmitReview();
 
   return (
     <View style={styles.formContainer}>
       <Formik
         initialValues={{ reviewText: "" }}
         validationSchema={reviewValidationSchema}
-        onSubmit={handleReviewSubmit}
+        onSubmit={(values) =>
+          handleSubmitReview(
+            selectedShop.fsq_id,
+            selectedShop.name,
+            selectedShop.location.address || "No address available.",
+            values.reviewText,
+            () => setReviewFormVisible(false)
+          )
+        }
       >
         {({
           handleChange,
