@@ -1,11 +1,14 @@
 import { View, Text, StyleSheet } from "react-native";
 
-const ReviewItem = ({ item }) => {
+const ReviewItem = ({ item, shopSelected }) => {
   return (
     <View style={styles.reviewCard}>
       <Text style={styles.shopName}>{item.shopName}</Text>
       <Text style={styles.shopAddress}>{item.address}</Text>
       <Text style={styles.reviewDate}>{item.createdAt}</Text>
+      {shopSelected && (
+        <Text style={styles.username}>Reviewed by: {item.username}</Text>
+      )}
       <Text style={styles.reviewText}>{item.text}</Text>
     </View>
   );
@@ -14,33 +17,41 @@ const ReviewItem = ({ item }) => {
 const styles = StyleSheet.create({
   reviewCard: {
     margin: 10,
-    padding: 15,
-    backgroundColor: "#f8f8f8",
+    padding: 20,
+    backgroundColor: "#ffffff",
     borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 3,
   },
   shopName: {
     fontWeight: "bold",
-    fontSize: 18,
-    marginBottom: 5,
+    fontSize: 20,
+    marginBottom: 8,
+    color: "#333",
   },
   shopAddress: {
     fontStyle: "italic",
-    color: "#555",
-    marginBottom: 5,
+    color: "#777",
+    marginBottom: 8,
   },
   reviewDate: {
-    color: "#555",
-    marginBottom: 5,
+    color: "#777",
+    marginBottom: 8,
+  },
+  username: {
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 8,
   },
   reviewText: {
-    marginTop: 5,
     fontSize: 16,
-    lineHeight: 22,
+    lineHeight: 24,
+    color: "#555",
   },
 });
 

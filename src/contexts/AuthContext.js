@@ -5,8 +5,9 @@ import {
   onAuthStateChanged,
   signOut,
   createUserWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
-import { off, onValue, push, ref, set } from "firebase/database";
+import { addReview, getAllReviews } from "../api/databaseService";
 
 // Create the context
 const AuthContext = createContext();
@@ -23,7 +24,8 @@ export const AuthProvider = ({ children }) => {
       setUser(user);
       setLoading(false);
       if (user) {
-        getReviews(user.uid);
+        const unsubscribeReviews = getAllReviews(setReviews);
+        return () => unsubscribeReviews();
       } else {
         setReviews([]);
       }
@@ -49,12 +51,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       if (res.user) {
-        const userInfo = {
+        await updateProfile(res.user, {
           displayName: fullName,
-        };
-        const userInfoRef = ref(database, `users/${res.user.uid}/info`);
-        const newUserInfoRef = push(userInfoRef);
-        await set(newUserInfoRef, userInfo);
+        });
       }
     } catch (error) {
       throw error;
@@ -75,43 +74,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const addReview = async (shopId, shopName, address, reviewText) => {
+  const addReviewHandler = async (shopId, shopName, address, reviewText) => {
     try {
-      if (user) {
-        const reviewRef = ref(database, `users/${user.uid}/reviews`);
-        const newReviewRef = push(reviewRef);
-        await set(newReviewRef, {
-          shopId,
-          shopName,
-          address,
-          text: reviewText,
-          createdAt: new Date().toLocaleDateString(),
-        });
-        console.log("Review added successfully");
-      }
+      await addReview(user, shopId, shopName, address, reviewText);
     } catch (error) {
       console.error("Error adding review:", error);
-    } finally {
-      setLoading(false);
     }
-  };
-
-  const getReviews = async (userId) => {
-    const reviewsRef = ref(database, `users/${userId}/reviews`);
-    onValue(reviewsRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const reviewsArray = Object.entries(data).map(([id, review]) => ({
-          id,
-          ...review,
-        }));
-        setReviews(reviewsArray);
-      } else {
-        setReviews([]);
-      }
-    });
-
-    return () => off(reviewsRef);
   };
 
   return (
@@ -123,7 +91,7 @@ export const AuthProvider = ({ children }) => {
         signIn,
         signUp,
         signout,
-        addReview,
+        addReview: addReviewHandler,
       }}
     >
       {children}

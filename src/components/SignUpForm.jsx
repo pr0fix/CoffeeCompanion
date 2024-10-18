@@ -12,7 +12,7 @@ import useSignUp from "../hooks/useSignUp";
 
 // Validator for fields in sign up form
 const signupValidationSchema = yup.object().shape({
-  fullName: yup.string().required("Full name is required"),
+  fullName: yup.string().min(2).required("Full name is required"),
   email: yup.string().required("Email is required"),
   password: yup
     .string()
@@ -114,7 +114,11 @@ const SignUpForm = ({ navigation }) => {
               <Text style={styles.error}>{errors.passwordConfirm}</Text>
             )}
 
-            <Pressable style={styles.inputButton} onPress={handleSubmit} disabled={loading}>
+            <Pressable
+              style={styles.inputButton}
+              onPress={handleSubmit}
+              disabled={loading}
+            >
               {loading ? (
                 <ActivityIndicator color="white" />
               ) : (

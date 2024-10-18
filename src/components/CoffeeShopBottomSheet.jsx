@@ -26,7 +26,7 @@ const CoffeeShopBottomSheet = ({
   snapPoints,
 }) => {
   const [reviewFormVisible, setReviewFormVisible] = useState(false);
-  const { reviews } = useAuth();
+  const { user, reviews } = useAuth();
 
   const filteredReviews = reviews.filter(
     (review) => review?.shopId === selectedShop?.fsq_id
@@ -78,37 +78,50 @@ const CoffeeShopBottomSheet = ({
                 return (
                   <View>
                     <Text style={styles.sectionHeader}>Reviews</Text>
-                    {item.data && item.data.length > 0 ? (
-                      item.data.map((review) => (
-                        <ReviewItem item={review} key={review.id} />
-                      ))
-                    ) : (
-                      <Text style={styles.noDataText}>
-                        No reviews available for this coffee shop.
-                      </Text>
-                    )}
+                    {user &&
+                      (item.data && item.data.length > 0 ? (
+                        item.data.map((review) => (
+                          <ReviewItem
+                            item={review}
+                            key={review.id}
+                            shopSelected={true}
+                          />
+                        ))
+                      ) : (
+                        <Text style={styles.noDataText}>
+                          No reviews available for this coffee shop.
+                        </Text>
+                      ))}
                   </View>
                 );
               }
             }}
             keyExtractor={(item, index) => item.type + index}
             ListFooterComponent={
-              !reviewFormVisible ? (
-                <View style={styles.buttonContainer}>
-                  <Pressable
-                    style={styles.toggleReviewForm}
-                    onPress={() => setReviewFormVisible(true)}
-                  >
-                    <Text style={styles.toggleReviewFormText}>
-                      Write a review
-                    </Text>
-                  </Pressable>
-                </View>
+              user ? (
+                !reviewFormVisible ? (
+                  <View style={styles.buttonContainer}>
+                    <Pressable
+                      style={styles.toggleReviewForm}
+                      onPress={() => setReviewFormVisible(true)}
+                    >
+                      <Text style={styles.toggleReviewFormText}>
+                        Write a review
+                      </Text>
+                    </Pressable>
+                  </View>
+                ) : (
+                  <ReviewForm
+                    selectedShop={selectedShop}
+                    setReviewFormVisible={setReviewFormVisible}
+                  />
+                )
               ) : (
-                <ReviewForm
-                  selectedShop={selectedShop}
-                  setReviewFormVisible={setReviewFormVisible}
-                />
+                <View style={styles.noAccessContainer}>
+                  <Text style={styles.noAccessText}>
+                    Please log in to see and write reviews.
+                  </Text>
+                </View>
               )
             }
           />
@@ -177,6 +190,16 @@ const styles = StyleSheet.create({
   toggleReviewFormText: {
     color: "white",
     fontWeight: "bold",
+  },
+  noAccessContainer: {
+    alignItems: "center",
+  },
+  noAccessText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+    fontStyle: "italic",
+    marginVertical: 10,
   },
 });
 

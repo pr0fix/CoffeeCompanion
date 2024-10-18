@@ -6,15 +6,15 @@ import {
   View,
   Image,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { useAuth } from "../contexts/AuthContext";
 import useSignOut from "../hooks/useSignOut";
 import ReviewItem from "./ReviewItem";
 
 const UserProfile = ({ navigation }) => {
-  const { user, reviews } = useAuth();
+  const { user, reviews, loading } = useAuth();
   const { handleSignOut, error } = useSignOut();
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -28,17 +28,23 @@ const UserProfile = ({ navigation }) => {
     });
   }, [navigation]);
 
+  if (loading) return <ActivityIndicator size="large" color="white" />;
+
+  const userReviews = reviews.filter((review) => review.userId === user.uid);
+
   return (
     <View style={styles.profileContainer}>
       <Image style={styles.image} source={"source"} resizeMode={"cover"} />
+      <Text>{user.displayName}</Text>
       <Text>{user.email}</Text>
-      {reviews && reviews.length > 0 ? (
+      {userReviews && userReviews.length > 0 ? (
         <>
           <Text style={styles.reviewHeader}>Your Reviews</Text>
           <FlatList
             style={{ width: "100%" }}
-            data={reviews}
+            data={userReviews}
             renderItem={({ item }) => <ReviewItem item={item} />}
+            keyExtractor={(item) => item.id}
           />
         </>
       ) : (
