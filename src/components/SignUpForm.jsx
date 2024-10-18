@@ -12,6 +12,7 @@ import useSignUp from "../hooks/useSignUp";
 
 // Validator for fields in sign up form
 const signupValidationSchema = yup.object().shape({
+  fullName: yup.string().min(2).required("Full name is required"),
   email: yup.string().required("Email is required"),
   password: yup
     .string()
@@ -34,8 +35,15 @@ const SignUpForm = ({ navigation }) => {
     <View>
       <Formik
         validationSchema={signupValidationSchema}
-        initialValues={{ email: "", password: "", passwordConfirm: "" }}
-        onSubmit={(values) => handleSignUp(values.email, values.password)}
+        initialValues={{
+          fullName: "",
+          email: "",
+          password: "",
+          passwordConfirm: "",
+        }}
+        onSubmit={(values) =>
+          handleSignUp(values.fullName, values.email, values.password)
+        }
       >
         {({
           handleChange,
@@ -46,6 +54,20 @@ const SignUpForm = ({ navigation }) => {
           touched,
         }) => (
           <View>
+            <TextInput
+              style={[
+                styles.input,
+                touched.fullName && errors.fullName ? styles.inputError : null,
+              ]}
+              placeholder="Full Name"
+              onChangeText={handleChange("fullName")}
+              onBlur={handleBlur("fullName")}
+              value={values.fullName}
+            />
+            {errors.fullName && touched.fullName && (
+              <Text style={styles.error}>{errors.fullName}</Text>
+            )}
+
             <TextInput
               style={[
                 styles.input,
@@ -92,7 +114,11 @@ const SignUpForm = ({ navigation }) => {
               <Text style={styles.error}>{errors.passwordConfirm}</Text>
             )}
 
-            <Pressable style={styles.inputButton} onPress={handleSubmit}>
+            <Pressable
+              style={styles.inputButton}
+              onPress={handleSubmit}
+              disabled={loading}
+            >
               {loading ? (
                 <ActivityIndicator color="white" />
               ) : (

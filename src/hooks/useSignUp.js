@@ -3,18 +3,14 @@ import { useAuth } from "../contexts/AuthContext";
 
 const useSignUp = () => {
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const { signUp } = useAuth();
+  const { signUp, loading } = useAuth();
 
-  const handleSignUp = async (email, password) => {
+  const handleSignUp = async (fullName, email, password) => {
     try {
-      setLoading(true);
       setError(null);
-      await signUp(email, password);
+      await signUp(fullName, email, password);
     } catch (err) {
       setError(err.message);
-    } finally {
-      setLoading(false);
     }
   };
   return { handleSignUp, error, loading };

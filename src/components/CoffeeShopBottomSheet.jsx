@@ -7,6 +7,8 @@ import BottomSheet, {
 
 import ReviewForm from "./ReviewForm";
 import FavoriteButton from "./FavoriteButton";
+import { useAuth } from "../contexts/AuthContext";
+import ReviewItem from "./ReviewItem";
 
 const formatDistance = (distance) => {
   return distance >= 1000
@@ -24,11 +26,16 @@ const CoffeeShopBottomSheet = ({
   snapPoints,
 }) => {
   const [reviewFormVisible, setReviewFormVisible] = useState(false);
+  const { user, reviews } = useAuth();
+
+  const filteredReviews = reviews.filter(
+    (review) => review?.shopId === selectedShop?.fsq_id
+  );
 
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      index={-1}
+      index={0}
       snapPoints={snapPoints}
       enablePanDownToClose={true}
     >
@@ -36,44 +43,88 @@ const CoffeeShopBottomSheet = ({
         <>
           <BottomSheetView style={styles.bottomSheetContent}>
             <View style={styles.shopHeader}>
-              <Text style={styles.shopName}>{selectedShop.name}</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.shopName}>{selectedShop.name}</Text>
+                <Text style={styles.shopAddress}>
+                  {selectedShop.location.address || "No address available."}
+                </Text>
+                <Text style={styles.distance}>
+                  {formatDistance(selectedShop.distance)}
+                </Text>
+              </View>
               <FavoriteButton />
             </View>
-            <Text style={styles.address}>
-              {selectedShop.location.address || "No address available."}
-            </Text>
-            <Text style={styles.distance}>
-              {formatDistance(selectedShop.distance)}
-            </Text>
           </BottomSheetView>
-          {selectedShop.photos && selectedShop.photos.length > 0 ? (
-            <BottomSheetFlatList
-              data={selectedShop.photos}
-              renderItem={renderPhotoItem}
-              keyExtractor={(item) => item.id}
-              horizontal={false}
-              showsHorizontalScrollIndicator={false}
-            />
-          ) : (
-            <BottomSheetView style={styles.bottomSheetContent}>
-              <Text>No photos available for this coffee shop.</Text>
-            </BottomSheetView>
-          )}
-          {!reviewFormVisible ? (
-            <View style={styles.buttonContainer}>
-              <Pressable
-                style={styles.toggleReviewForm}
-                onPress={() => setReviewFormVisible(true)}
-              >
-                <Text style={styles.toggleReviewFormText}>Write a review</Text>
-              </Pressable>
-            </View>
-          ) : (
-            <ReviewForm
-              selectedShop={selectedShop}
-              setReviewFormVisible={setReviewFormVisible}
-            />
-          )}
+          <BottomSheetFlatList
+            data={[
+              { type: "photos", data: selectedShop.photos },
+              { type: "reviews", data: filteredReviews },
+            ]}
+            renderItem={({ item }) => {
+              if (item.type === "photos") {
+                return (
+                  <View>
+                    <Text style={styles.sectionHeader}>Photos</Text>
+                    {item.data && item.data.length > 0 ? (
+                      item.data.map((photo) => renderPhotoItem({ item: photo }))
+                    ) : (
+                      <Text style={styles.noDataText}>
+                        No photos available for this coffee shop.
+                      </Text>
+                    )}
+                  </View>
+                );
+              } else if (item.type === "reviews") {
+                return (
+                  <View>
+                    <Text style={styles.sectionHeader}>Reviews</Text>
+                    {user &&
+                      (item.data && item.data.length > 0 ? (
+                        item.data.map((review) => (
+                          <ReviewItem
+                            item={review}
+                            key={review.id}
+                            shopSelected={true}
+                          />
+                        ))
+                      ) : (
+                        <Text style={styles.noDataText}>
+                          No reviews available for this coffee shop.
+                        </Text>
+                      ))}
+                  </View>
+                );
+              }
+            }}
+            keyExtractor={(item, index) => item.type + index}
+            ListFooterComponent={
+              user ? (
+                !reviewFormVisible ? (
+                  <View style={styles.buttonContainer}>
+                    <Pressable
+                      style={styles.toggleReviewForm}
+                      onPress={() => setReviewFormVisible(true)}
+                    >
+                      <Text style={styles.toggleReviewFormText}>
+                        Write a review
+                      </Text>
+                    </Pressable>
+                  </View>
+                ) : (
+                  <ReviewForm
+                    selectedShop={selectedShop}
+                    setReviewFormVisible={setReviewFormVisible}
+                  />
+                )
+              ) : (
+                <View style={styles.noAccessContainer}>
+                  <Text style={styles.noAccessText}>
+                    Please log in to see and write reviews.
+                  </Text>
+                </View>
+              )
+            }
+          />
         </>
       )}
     </BottomSheet>
@@ -85,22 +136,29 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: "center",
   },
+  sectionHeader: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+    marginLeft: 20,
+    marginTop: 20,
+  },
   shopHeader: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 5,
   },
   shopName: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
-    flex: 1,
   },
   shopAddress: {
-    fontSize: 14,
-    marginTop: 5,
+    fontSize: 16,
+    fontStyle: "italic",
+    color: "gray",
   },
   distance: {
-    fontSize: 14,
+    fontSize: 16,
     color: "gray",
   },
   photo: {
@@ -108,6 +166,11 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 10,
     marginVertical: 5,
+  },
+  noDataText: {
+    marginVertical: 5,
+    fontStyle: "italic",
+    textAlign: "center",
   },
   buttonContainer: {
     marginTop: 20,
@@ -127,6 +190,16 @@ const styles = StyleSheet.create({
   toggleReviewFormText: {
     color: "white",
     fontWeight: "bold",
+  },
+  noAccessContainer: {
+    alignItems: "center",
+  },
+  noAccessText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+    fontStyle: "italic",
+    marginVertical: 10,
   },
 });
 

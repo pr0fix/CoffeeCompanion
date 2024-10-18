@@ -1,7 +1,7 @@
 import UserProfile from "../components/UserProfile";
 
-const UserProfileScreen = () => {
-  return <UserProfile />;
+const UserProfileScreen = ({navigation}) => {
+  return <UserProfile navigation={navigation}/>;
 };
 
 export default UserProfileScreen;

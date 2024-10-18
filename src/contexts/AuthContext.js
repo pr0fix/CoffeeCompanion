@@ -5,8 +5,9 @@ import {
   onAuthStateChanged,
   signOut,
   createUserWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
-import { push, ref, set } from "firebase/database";
+import { addReview, getAllReviews } from "../api/databaseService";
 
 // Create the context
 const AuthContext = createContext();
@@ -15,12 +16,19 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [reviews, setReviews] = useState([]);
 
   // Listen for authentication state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
+      if (user) {
+        const unsubscribeReviews = getAllReviews(setReviews);
+        return () => unsubscribeReviews();
+      } else {
+        setReviews([]);
+      }
     });
 
     // Clean up subscription on unmount
@@ -33,15 +41,24 @@ export const AuthProvider = ({ children }) => {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
   // Function to sign up user
-  const signUp = async (email, password) => {
+  const signUp = async (fullName, email, password) => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      if (res.user) {
+        await updateProfile(res.user, {
+          displayName: fullName,
+        });
+      }
     } catch (error) {
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,21 +69,14 @@ export const AuthProvider = ({ children }) => {
       await signOut(auth);
     } catch (error) {
       console.error("Error signing out:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const addReview = async (shopId, reviewText) => {
+  const addReviewHandler = async (shopId, shopName, address, reviewText) => {
     try {
-      if (user) {
-        const reviewRef = ref(database, `users/${user.uid}/reviews`);
-        const newReviewRef = push(reviewRef);
-        await set(newReviewRef, {
-          shopId,
-          text: reviewText,
-          createdAt: new Date().toISOString(),
-        });
-        console.log("Review added successfully");
-      }
+      await addReview(user, shopId, shopName, address, reviewText);
     } catch (error) {
       console.error("Error adding review:", error);
     }
@@ -77,10 +87,11 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         loading,
+        reviews,
         signIn,
         signUp,
         signout,
-        addReview,
+        addReview: addReviewHandler,
       }}
     >
       {children}
