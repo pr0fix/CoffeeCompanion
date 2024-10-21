@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { auth, database } from "../api/firebaseConfig";
+import { auth } from "../api/firebaseConfig";
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
@@ -10,10 +10,10 @@ import {
 import { addReview, getAllReviews } from "../api/databaseService";
 
 // Create the context
-const AuthContext = createContext();
+const UserContext = createContext();
 
 // Create a provider component
-export const AuthProvider = ({ children }) => {
+export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
@@ -74,6 +74,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Handler function for adding a new review, which provides data to db-service function
   const addReviewHandler = async (shopId, shopName, address, reviewText) => {
     try {
       await addReview(user, shopId, shopName, address, reviewText);
@@ -83,7 +84,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider
+    <UserContext.Provider
       value={{
         user,
         loading,
@@ -95,9 +96,9 @@ export const AuthProvider = ({ children }) => {
       }}
     >
       {children}
-    </AuthContext.Provider>
+    </UserContext.Provider>
   );
 };
 
-// Custom hook to use the AuthContext
-export const useAuth = () => useContext(AuthContext);
+// Custom hook to use the UserContext
+export const useUser = () => useContext(UserContext);

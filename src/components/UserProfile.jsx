@@ -8,12 +8,12 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import { useAuth } from "../contexts/AuthContext";
+import { useUser } from "../contexts/UserContext";
 import useSignOut from "../hooks/useSignOut";
 import ReviewItem from "./ReviewItem";
 
 const UserProfile = ({ navigation }) => {
-  const { user, reviews, loading } = useAuth();
+  const { user, reviews, loading } = useUser();
   const { handleSignOut, error } = useSignOut();
   useLayoutEffect(() => {
     navigation.setOptions({

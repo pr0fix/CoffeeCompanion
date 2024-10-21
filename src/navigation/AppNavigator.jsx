@@ -6,7 +6,7 @@ import HomeScreen from "../screens/HomeScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import Icon from "react-native-vector-icons/Ionicons";
 import UserProfileScreen from "../screens/UserProfileScreen";
-import { useAuth } from "../contexts/AuthContext";
+import { useUser } from "../contexts/UserContext";
 import EditProfileScreen from "../screens/EditProfileScreen";
 
 const Tab = createBottomTabNavigator();
@@ -67,7 +67,7 @@ const AuthStack = () => {
 
 // Main bottom tabs navigator
 const AppNavigator = () => {
-  const { user, loading } = useAuth();
+  const { user, loading } = useUser();
 
   if (loading) return null;
 

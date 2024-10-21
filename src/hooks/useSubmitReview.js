@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import { useUser } from "../contexts/UserContext";
 
 const useSubmitReview = () => {
   const [error, setError] = useState(null);
-  const { addReview, loading } = useAuth();
+  const { addReview, loading } = useUser();
 
   const handleSubmitReview = async (
     shopId,

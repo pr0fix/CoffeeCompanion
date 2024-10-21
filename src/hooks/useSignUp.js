@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import { useUser } from "../contexts/UserContext";
 
 const useSignUp = () => {
   const [error, setError] = useState(null);
-  const { signUp, loading } = useAuth();
+  const { signUp, loading } = useUser();
 
   const handleSignUp = async (fullName, email, password) => {
     try {

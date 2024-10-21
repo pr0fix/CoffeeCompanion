@@ -1,6 +1,7 @@
 import { database } from "./firebaseConfig";
 import { onValue, push, ref, set } from "firebase/database";
 
+// Service to add a review to firebase db
 export const addReview = async (
   user,
   shopId,
@@ -28,6 +29,7 @@ export const addReview = async (
   }
 };
 
+// Function to fetch reviews from firebase db
 export const getAllReviews = (setReviews) => {
   const reviewsRef = ref(database, `reviews`);
 

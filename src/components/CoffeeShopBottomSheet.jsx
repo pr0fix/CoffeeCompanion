@@ -7,7 +7,7 @@ import BottomSheet, {
 
 import ReviewForm from "./ReviewForm";
 import FavoriteButton from "./FavoriteButton";
-import { useAuth } from "../contexts/AuthContext";
+import { useUser } from "../contexts/UserContext";
 import ReviewItem from "./ReviewItem";
 
 const formatDistance = (distance) => {
@@ -26,7 +26,7 @@ const CoffeeShopBottomSheet = ({
   snapPoints,
 }) => {
   const [reviewFormVisible, setReviewFormVisible] = useState(false);
-  const { user, reviews } = useAuth();
+  const { user, reviews } = useUser();
 
   const filteredReviews = reviews.filter(
     (review) => review?.shopId === selectedShop?.fsq_id
@@ -119,7 +119,7 @@ const CoffeeShopBottomSheet = ({
               ) : (
                 <View style={styles.noAccessContainer}>
                   <Text style={styles.noAccessText}>
-                    Please log in to see and write reviews.
+                    Please sign in to see and write reviews.
                   </Text>
                 </View>
               )

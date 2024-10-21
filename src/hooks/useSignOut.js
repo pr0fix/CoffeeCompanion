@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import { useUser } from "../contexts/UserContext";
 
 const useSignOut = () => {
   const [error, setError] = useState(null);
-  const { signout, loading } = useAuth();
+  const { signout, loading } = useUser();
 
   const handleSignOut = async () => {
     try {
