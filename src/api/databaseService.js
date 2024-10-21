@@ -46,3 +46,20 @@ export const getAllReviews = (setReviews) => {
     }
   });
 };
+
+// create function to fetch user favorites
+
+// Function for user to add a cafe to favorites
+export const addToFavorites = async (userId, shopId) => {
+  const favoriteRef = ref(database, `users/${userId}/favorites`);
+  const newFavoriteRef = push(favoriteRef);
+  try {
+    await set(newFavoriteRef, {
+      shopId,
+    });
+  } catch (error) {
+    console.error("Error adding shop to favorites:", error);
+  }
+};
+
+// create function to remove a cafe from favorites

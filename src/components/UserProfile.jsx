@@ -12,9 +12,12 @@ import { useUser } from "../contexts/UserContext";
 import useSignOut from "../hooks/useSignOut";
 import ReviewItem from "./ReviewItem";
 
+// User profile component
 const UserProfile = ({ navigation }) => {
   const { user, reviews, loading } = useUser();
   const { handleSignOut, error } = useSignOut();
+
+  // Sets the options for header so that the "Edit Profile" is placed in the rightmost side of the header bar
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (

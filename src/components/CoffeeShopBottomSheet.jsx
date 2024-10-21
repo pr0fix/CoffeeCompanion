@@ -4,22 +4,29 @@ import BottomSheet, {
   BottomSheetFlatList,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-
 import ReviewForm from "./ReviewForm";
 import FavoriteButton from "./FavoriteButton";
 import { useUser } from "../contexts/UserContext";
 import ReviewItem from "./ReviewItem";
+import useHandleFavorites from "../hooks/useHandleFavorites";
 
+/*
+Formats a distance value into a more visually appealing string.
+If the distance is 1000 meters or more, it converts the distance to kilometers.
+Otherwise, it returns the distance in meters.
+*/
 const formatDistance = (distance) => {
   return distance >= 1000
     ? (distance / 1000).toFixed(1) + " km"
     : distance.toString() + " m";
 };
 
+// Renders a photo item as an Image component.
 const renderPhotoItem = ({ item }) => (
   <Image key={item.id} source={{ uri: item.url }} style={styles.photo} />
 );
 
+// Bottom sheet component
 const CoffeeShopBottomSheet = ({
   selectedShop,
   bottomSheetRef,
@@ -27,10 +34,21 @@ const CoffeeShopBottomSheet = ({
 }) => {
   const [reviewFormVisible, setReviewFormVisible] = useState(false);
   const { user, reviews } = useUser();
+  const { handleAddFavorite } = useHandleFavorites();
 
+  // Filters reviews so that each coffee shops bottom sheet will have only reviews related to it visible
   const filteredReviews = reviews.filter(
     (review) => review?.shopId === selectedShop?.fsq_id
   );
+
+  // const isFavorite = user?.favorites?.includes(selectedShop.fsq_id);
+
+  // onPress function handler which checks if coffee shop is in user favorites or not and acts correspondingly
+  const onPressFavoriteButton = () => {
+    // isfavorite ?
+    handleAddFavorite(user.uid, selectedShop.fsq_id);
+    // : handleRemoveFavorite()
+  };
 
   return (
     <BottomSheet
@@ -52,7 +70,10 @@ const CoffeeShopBottomSheet = ({
                   {formatDistance(selectedShop.distance)}
                 </Text>
               </View>
-              <FavoriteButton />
+              <FavoriteButton
+                onPress={onPressFavoriteButton}
+                
+              />
             </View>
           </BottomSheetView>
           <BottomSheetFlatList

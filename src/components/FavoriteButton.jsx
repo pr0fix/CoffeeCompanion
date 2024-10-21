@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
+// Component which renders the heart-shaped favorite bottom in bottomsheet
 const FavoriteButton = ({ onPress, isFavorite }) => {
   return (
     <Pressable style={styles.heartButton} onPress={onPress}>

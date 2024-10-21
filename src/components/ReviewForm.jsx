@@ -10,10 +10,12 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import useSubmitReview from "../hooks/useSubmitReview";
 
+// Validation schema for review form
 const reviewValidationSchema = yup.object().shape({
   reviewText: yup.string().required("Review text is required"),
 });
 
+// Review form component
 const ReviewForm = ({ selectedShop, setReviewFormVisible }) => {
   const { handleSubmitReview, loading } = useSubmitReview();
 

@@ -7,7 +7,11 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { addReview, getAllReviews } from "../api/databaseService";
+import {
+  addReview,
+  getAllReviews,
+  addToFavorites,
+} from "../api/databaseService";
 
 // Create the context
 const UserContext = createContext();
@@ -83,6 +87,16 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const addFavoriteHandler = async (userId, shopId) => {
+    try {
+      await addToFavorites(userId, shopId);
+    } catch (error) {
+      console.error("Erro adding to favorites:", error);
+    }
+  };
+
+  // create a removeFavoriteHandler
+
   return (
     <UserContext.Provider
       value={{
@@ -93,6 +107,7 @@ export const UserProvider = ({ children }) => {
         signUp,
         signout,
         addReview: addReviewHandler,
+        addFavorite: addFavoriteHandler,
       }}
     >
       {children}
