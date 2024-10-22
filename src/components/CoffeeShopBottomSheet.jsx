@@ -33,21 +33,23 @@ const CoffeeShopBottomSheet = ({
   snapPoints,
 }) => {
   const [reviewFormVisible, setReviewFormVisible] = useState(false);
-  const { user, reviews } = useUser();
-  const { handleAddFavorite } = useHandleFavorites();
+  const { user, reviews, favorites } = useUser();
+  const { handleAddFavorite, handleRemoveFavorite } = useHandleFavorites();
 
   // Filters reviews so that each coffee shops bottom sheet will have only reviews related to it visible
   const filteredReviews = reviews.filter(
     (review) => review?.shopId === selectedShop?.fsq_id
   );
 
-  // const isFavorite = user?.favorites?.includes(selectedShop.fsq_id);
+  const isFavorite = favorites?.includes(selectedShop?.fsq_id);
 
   // onPress function handler which checks if coffee shop is in user favorites or not and acts correspondingly
-  const onPressFavoriteButton = () => {
-    // isfavorite ?
-    handleAddFavorite(user.uid, selectedShop.fsq_id);
-    // : handleRemoveFavorite()
+  const onPressFavoriteButton = async () => {
+    if (isFavorite) {
+      await handleRemoveFavorite(user.uid, selectedShop.fsq_id);
+    } else {
+      await handleAddFavorite(user.uid, selectedShop.fsq_id);
+    }
   };
 
   return (
@@ -70,10 +72,12 @@ const CoffeeShopBottomSheet = ({
                   {formatDistance(selectedShop.distance)}
                 </Text>
               </View>
-              <FavoriteButton
-                onPress={onPressFavoriteButton}
-                
-              />
+              {user && (
+                <FavoriteButton
+                  onPress={onPressFavoriteButton}
+                  isFavorite={isFavorite}
+                />
+              )}
             </View>
           </BottomSheetView>
           <BottomSheetFlatList
