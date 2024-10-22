@@ -1,7 +1,7 @@
 import { database } from "./firebaseConfig";
 import { onValue, push, ref, remove, set } from "firebase/database";
 
-// Service to add a review to firebase db
+// Function to add a review to firebase db
 export const addReview = async (
   user,
   shopId,
@@ -13,6 +13,7 @@ export const addReview = async (
 
   const reviewRef = ref(database, `reviews`);
   const newReviewRef = push(reviewRef);
+
   try {
     await set(newReviewRef, {
       userId: user.uid,
@@ -47,14 +48,14 @@ export const getAllReviews = (setReviews) => {
   });
 };
 
-// create function to fetch user favorites
+// Function to fetch user favorites
 export const getUserFavorites = async (userId, setFavorites) => {
   const favoritesRef = ref(database, `users/${userId}/favorites`);
 
   return onValue(favoritesRef, (snapshot) => {
     const data = snapshot.val();
     if (data) {
-      const favoritesArray = Object.keys(data)
+      const favoritesArray = Object.keys(data);
       setFavorites(favoritesArray);
     } else {
       setFavorites([]);
@@ -72,7 +73,7 @@ export const addToFavorites = async (userId, shopId) => {
   }
 };
 
-// create function to remove a cafe from favorites
+// Function to remove a cafe from favorites
 export const removeFromFavorites = async (userId, shopId) => {
   const favoriteRef = ref(database, `users/${userId}/favorites/${shopId}`);
   try {

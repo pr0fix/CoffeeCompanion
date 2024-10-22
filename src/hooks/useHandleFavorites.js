@@ -14,7 +14,6 @@ const useAddFavorite = () => {
     }
   };
 
-  // create handleRemoveFavorite
   const handleRemoveFavorite = async (userId, shopId) => {
     try {
       await removeFavorite(userId, shopId);

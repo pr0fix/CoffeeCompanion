@@ -92,6 +92,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Handler function for adding a coffee shop to favorites
   const addFavoriteHandler = async (userId, shopId) => {
     try {
       await addToFavorites(userId, shopId);
@@ -101,7 +102,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // create a removeFavoriteHandler
+  // Handler function for removing a coffee shop from favorites
   const removeFavoriteHandler = async (userId, shopId) => {
     try {
       await removeFromFavorites(userId, shopId);

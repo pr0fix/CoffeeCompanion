@@ -41,6 +41,7 @@ const CoffeeShopBottomSheet = ({
     (review) => review?.shopId === selectedShop?.fsq_id
   );
 
+  // Check if coffee shop is in user favorites to pass it to FavoriteButton component
   const isFavorite = favorites?.includes(selectedShop?.fsq_id);
 
   // onPress function handler which checks if coffee shop is in user favorites or not and acts correspondingly
