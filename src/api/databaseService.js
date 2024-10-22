@@ -55,7 +55,10 @@ export const getUserFavorites = async (userId, setFavorites) => {
   return onValue(favoritesRef, (snapshot) => {
     const data = snapshot.val();
     if (data) {
-      const favoritesArray = Object.keys(data);
+      const favoritesArray = Object.entries(data).map(([id, favorite]) => ({
+        id,
+        ...favorite,
+      }));
       setFavorites(favoritesArray);
     } else {
       setFavorites([]);

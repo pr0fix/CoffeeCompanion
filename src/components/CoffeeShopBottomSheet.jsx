@@ -42,14 +42,21 @@ const CoffeeShopBottomSheet = ({
   );
 
   // Check if coffee shop is in user favorites to pass it to FavoriteButton component
-  const isFavorite = favorites?.includes(selectedShop?.fsq_id);
+  const isFavorite = favorites?.some(
+    (favorite) => favorite.id === selectedShop?.fsq_id
+  );
 
   // onPress function handler which checks if coffee shop is in user favorites or not and acts correspondingly
   const onPressFavoriteButton = async () => {
     if (isFavorite) {
       await handleRemoveFavorite(user.uid, selectedShop.fsq_id);
     } else {
-      await handleAddFavorite(user.uid, selectedShop.fsq_id, selectedShop.name, selectedShop.location.address);
+      await handleAddFavorite(
+        user.uid,
+        selectedShop.fsq_id,
+        selectedShop.name,
+        selectedShop.location.address
+      );
     }
   };
 
