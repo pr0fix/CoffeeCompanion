@@ -49,7 +49,7 @@ const CoffeeShopBottomSheet = ({
     if (isFavorite) {
       await handleRemoveFavorite(user.uid, selectedShop.fsq_id);
     } else {
-      await handleAddFavorite(user.uid, selectedShop.fsq_id);
+      await handleAddFavorite(user.uid, selectedShop.fsq_id, selectedShop.name, selectedShop.location.address);
     }
   };
 

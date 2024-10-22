@@ -1,11 +1,18 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Alert, Linking, SafeAreaView, StyleSheet, View } from "react-native";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import {
+  Alert,
+  Linking,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from "react-native";
 import { Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import * as Location from "expo-location";
 import fetchCoffeeShops from "../api/fetchCoffeeShops";
 import fetchCoffeeShopPhotos from "../api/fetchCoffeeShopPhotos";
 import CoffeeShopBottomSheet from "./CoffeeShopBottomSheet";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 // Removes any default POIs and markings that come with Google Maps
 const customMapStyle = [
@@ -142,7 +149,16 @@ const Map = () => {
               title={shop.name}
               description={shop.location.address || "No address available"}
               onPress={() => handleMarkerPress(shop)}
-            />
+            >
+              <View style={styles.markerContainer}>
+                <Icon
+                  name="coffee"
+                  style={styles.markerIcon}
+                  size={15}
+                  color="#FFFFFF"
+                />
+              </View>
+            </Marker>
           ))}
         </MapView>
       </View>
@@ -159,6 +175,14 @@ const styles = StyleSheet.create({
   map: {
     height: "100%",
     width: "100%",
+  },
+  markerContainer: {
+    backgroundColor: "#6F3E37",
+    padding: 8,
+    borderRadius: 25,
+  },
+  markerIcon: {
+    alignSelf: "center",
   },
 });
 

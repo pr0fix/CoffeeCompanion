@@ -5,9 +5,9 @@ const useAddFavorite = () => {
   const { addFavorite, removeFavorite, loading } = useUser();
   const [error, setError] = useState(null);
 
-  const handleAddFavorite = async (userId, shopId) => {
+  const handleAddFavorite = async (userId, shopId, shopName, address) => {
     try {
-      await addFavorite(userId, shopId);
+      await addFavorite(userId, shopId, shopName, address);
       console.log("Added to favorites");
     } catch (err) {
       setError(err.message);

@@ -64,10 +64,14 @@ export const getUserFavorites = async (userId, setFavorites) => {
 };
 
 // Function for user to add a cafe to favorites
-export const addToFavorites = async (userId, shopId) => {
+export const addToFavorites = async (userId, shopId, shopName, address) => {
+  const validAddress = address || "No address available.";
   const favoriteRef = ref(database, `users/${userId}/favorites/${shopId}`);
   try {
-    await set(favoriteRef, true);
+    await set(favoriteRef, {
+      shopName,
+      address: validAddress,
+    });
   } catch (error) {
     console.error("Error adding shop to favorites:", error);
   }

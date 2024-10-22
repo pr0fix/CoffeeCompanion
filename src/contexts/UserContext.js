@@ -93,9 +93,9 @@ export const UserProvider = ({ children }) => {
   };
 
   // Handler function for adding a coffee shop to favorites
-  const addFavoriteHandler = async (userId, shopId) => {
+  const addFavoriteHandler = async (userId, shopId, shopName, address) => {
     try {
-      await addToFavorites(userId, shopId);
+      await addToFavorites(userId, shopId, shopName, address);
       await getUserFavorites(user.uid, setFavorites);
     } catch (error) {
       console.error("Error adding to favorites:", error);
