@@ -28,6 +28,7 @@ const signupValidationSchema = yup.object().shape({
     .required("Password confirmation is required"),
 });
 
+// Sign-up form component
 const SignUpForm = ({ navigation }) => {
   const { handleSignUp, error, loading } = useSignUp();
 

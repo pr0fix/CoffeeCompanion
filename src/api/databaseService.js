@@ -1,7 +1,7 @@
 import { database } from "./firebaseConfig";
-import { onValue, push, ref, set } from "firebase/database";
+import { onValue, push, ref, remove, set } from "firebase/database";
 
-// Service to add a review to firebase db
+// Function to add a review to firebase db
 export const addReview = async (
   user,
   shopId,
@@ -13,6 +13,7 @@ export const addReview = async (
 
   const reviewRef = ref(database, `reviews`);
   const newReviewRef = push(reviewRef);
+
   try {
     await set(newReviewRef, {
       userId: user.uid,
@@ -45,4 +46,46 @@ export const getAllReviews = (setReviews) => {
       setReviews([]);
     }
   });
+};
+
+// Function to fetch user favorites
+export const getUserFavorites = async (userId, setFavorites) => {
+  const favoritesRef = ref(database, `users/${userId}/favorites`);
+
+  return onValue(favoritesRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      const favoritesArray = Object.entries(data).map(([id, favorite]) => ({
+        id,
+        ...favorite,
+      }));
+      setFavorites(favoritesArray);
+    } else {
+      setFavorites([]);
+    }
+  });
+};
+
+// Function for user to add a cafe to favorites
+export const addToFavorites = async (userId, shopId, shopName, address) => {
+  const validAddress = address || "No address available.";
+  const favoriteRef = ref(database, `users/${userId}/favorites/${shopId}`);
+  try {
+    await set(favoriteRef, {
+      shopName,
+      address: validAddress,
+    });
+  } catch (error) {
+    console.error("Error adding shop to favorites:", error);
+  }
+};
+
+// Function to remove a cafe from favorites
+export const removeFromFavorites = async (userId, shopId) => {
+  const favoriteRef = ref(database, `users/${userId}/favorites/${shopId}`);
+  try {
+    await remove(favoriteRef);
+  } catch (error) {
+    console.error("Error removing shop from favorites:", error);
+  }
 };

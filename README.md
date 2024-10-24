@@ -57,6 +57,7 @@ CoffeeCompanion is your go-to mobile app for finding nearby coffee shops!
   ```bash
   npm start --tunnel
   ```
+- Currently the app is a frontend only implementation where it handles everything from fetching data and showing it by itself without a backend. Backend will be developed later on.
 
 ## Usage
 

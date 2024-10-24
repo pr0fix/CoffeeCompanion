@@ -12,6 +12,7 @@ import EditProfileScreen from "../screens/EditProfileScreen";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
+// Navigation stack for profile and edit profile screens
 const ProfileStack = () => {
   return (
     <Stack.Navigator
@@ -38,7 +39,7 @@ const ProfileStack = () => {
   );
 };
 
-// Navigation stack for sign in and sign up
+// Navigation stack for sign in and sign up screens
 const AuthStack = () => {
   return (
     <Stack.Navigator

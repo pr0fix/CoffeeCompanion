@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 
+// Returns a review item card to be shown in list of reviews
 const ReviewItem = ({ item, shopSelected }) => {
   return (
     <View style={styles.reviewCard}>

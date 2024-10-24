@@ -16,6 +16,7 @@ const signInValidationSchema = yup.object().shape({
   password: yup.string().required("Password is required"),
 });
 
+// Sign-in form component
 const SignInForm = ({ navigation }) => {
   const { handleSignIn, error, loading } = useSignIn();
 

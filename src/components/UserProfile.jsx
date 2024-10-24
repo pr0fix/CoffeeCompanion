@@ -11,10 +11,14 @@ import {
 import { useUser } from "../contexts/UserContext";
 import useSignOut from "../hooks/useSignOut";
 import ReviewItem from "./ReviewItem";
+import FavoriteItem from "./FavoriteItem";
 
+// User profile component
 const UserProfile = ({ navigation }) => {
-  const { user, reviews, loading } = useUser();
+  const { user, reviews, favorites, loading } = useUser();
   const { handleSignOut, error } = useSignOut();
+
+  // Sets the options for header so that the "Edit Profile" is placed in the rightmost side of the header bar
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -32,29 +36,73 @@ const UserProfile = ({ navigation }) => {
 
   const userReviews = reviews.filter((review) => review.userId === user.uid);
 
+  const data = [
+    { type: "profile" },
+    { type: "reviews", data: userReviews },
+    { type: "favorites", data: favorites },
+    { type: "signOut" },
+  ];
+
+  const renderItem = ({ item }) => {
+    switch (item.type) {
+      case "profile":
+        return (
+          <View style={styles.profileContainer}>
+            <Image
+              style={styles.image}
+              source={"source"}
+              resizeMode={"cover"}
+            />
+            <Text>{user.displayName}</Text>
+            <Text>{user.email}</Text>
+          </View>
+        );
+      case "reviews":
+        return item.data && item.data.length > 0 ? (
+          <View style={styles.sectionContainer}>
+            <Text style={styles.dataHeader}>Your Reviews</Text>
+            <FlatList
+              data={item.data}
+              renderItem={({ item }) => <ReviewItem item={item} />}
+              keyExtractor={(item) => item.id}
+              scrollEnabled={false} // Disable inner FlatList scrolling
+            />
+          </View>
+        ) : (
+          <Text style={styles.noDataHeader}>No reviews yet</Text>
+        );
+      case "favorites":
+        return item.data && item.data.length > 0 ? (
+          <View style={styles.sectionContainer}>
+            <Text style={styles.dataHeader}>Your Favorites</Text>
+            <FlatList
+              data={item.data}
+              renderItem={({ item }) => <FavoriteItem item={item} userId={user.uid} favorites={favorites}/>}
+              keyExtractor={(item) => item.id}
+              scrollEnabled={false} // Disable inner FlatList scrolling
+            />
+          </View>
+        ) : (
+          <Text style={styles.noDataHeader}>No favorites yet</Text>
+        );
+      case "signOut":
+        return (
+          <Pressable style={styles.signOutButton} onPress={handleSignOut}>
+            <Text style={styles.signOutButtonText}>Sign Out</Text>
+          </Pressable>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <View style={styles.profileContainer}>
-      <Image style={styles.image} source={"source"} resizeMode={"cover"} />
-      <Text>{user.displayName}</Text>
-      <Text>{user.email}</Text>
-      {userReviews && userReviews.length > 0 ? (
-        <>
-          <Text style={styles.reviewHeader}>Your Reviews</Text>
-          <FlatList
-            style={{ width: "100%" }}
-            data={userReviews}
-            renderItem={({ item }) => <ReviewItem item={item} />}
-            keyExtractor={(item) => item.id}
-          />
-        </>
-      ) : (
-        <Text style={styles.noReviewsHeader}>No reviews yet</Text>
-      )}
-      <Pressable style={styles.signOutButton} onPress={handleSignOut}>
-        <Text style={styles.signOutButtonText}>Sign Out</Text>
-      </Pressable>
-      {error && <Text style={{ color: "red" }}>{error}</Text>}
-    </View>
+    <FlatList
+      data={data}
+      renderItem={renderItem}
+      keyExtractor={(item, index) => `${item.type}-${index}`}
+      contentContainerStyle={styles.container}
+    />
   );
 };
 
@@ -80,17 +128,22 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 75,
   },
-  reviewHeader: {
+  dataHeader: {
     fontSize: 20,
     fontWeight: "bold",
     marginTop: 30,
     marginLeft: 10,
     alignSelf: "flex-start",
   },
-  noReviewsHeader: {
+  noDataHeader: {
     fontSize: 20,
     fontWeight: "bold",
     marginTop: 20,
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  flatlist: {
+    width: "100%",
     marginBottom: 20,
   },
   signOutButton: {
@@ -99,7 +152,7 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#C70000",
     borderRadius: 5,
-    alignItems: "center",
+    alignSelf: "center",
   },
   signOutButtonText: {
     color: "white",
