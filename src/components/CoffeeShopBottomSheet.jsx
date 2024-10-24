@@ -9,22 +9,107 @@ import FavoriteButton from "./FavoriteButton";
 import { useUser } from "../contexts/UserContext";
 import ReviewItem from "./ReviewItem";
 import useHandleFavorites from "../hooks/useHandleFavorites";
+import formatDistance from "../utils/formatDistance";
 
-/*
-Formats a distance value into a more visually appealing string.
-If the distance is 1000 meters or more, it converts the distance to kilometers.
-Otherwise, it returns the distance in meters.
-*/
-const formatDistance = (distance) => {
-  return distance >= 1000
-    ? (distance / 1000).toFixed(1) + " km"
-    : distance.toString() + " m";
+// Renders the header for bottom sheet with shop name, address, distance and favorite button.
+const ShopHeader = ({
+  selectedShop,
+  user,
+  isFavorite,
+  onPressFavoriteButton,
+}) => {
+  return (
+    <View style={styles.shopHeader}>
+      <View style={{ flex: 1 }}>
+        <Text style={styles.shopName}>{selectedShop.name}</Text>
+        <Text style={styles.shopAddress}>
+          {selectedShop.location.address || "No address available."}
+        </Text>
+        <Text style={styles.distance}>
+          {formatDistance(selectedShop.distance)}
+        </Text>
+      </View>
+      {user && (
+        <FavoriteButton
+          onPress={onPressFavoriteButton}
+          isFavorite={isFavorite}
+        />
+      )}
+    </View>
+  );
 };
 
 // Renders a photo item as an Image component.
 const renderPhotoItem = ({ item }) => (
   <Image key={item.id} source={{ uri: item.url }} style={styles.photo} />
 );
+
+// Renders the photo or review items based on their type.
+const renderReviewItem = ({ item, user }) => {
+  if (item.type === "photos") {
+    return (
+      <View>
+        <Text style={styles.sectionHeader}>Photos</Text>
+        {item.data && item.data.length > 0 ? (
+          item.data.map((photo) => renderPhotoItem({ item: photo }))
+        ) : (
+          <Text style={styles.noDataText}>
+            No photos available for this coffee shop.
+          </Text>
+        )}
+      </View>
+    );
+  } else if (item.type === "reviews") {
+    return (
+      <View>
+        <Text style={styles.sectionHeader}>Reviews</Text>
+        {user &&
+          (item.data && item.data.length > 0 ? (
+            item.data.map((review) => (
+              <ReviewItem item={review} key={review.id} shopSelected={true} />
+            ))
+          ) : (
+            <Text style={styles.noDataText}>
+              No reviews available for this coffee shop.
+            </Text>
+          ))}
+      </View>
+    );
+  }
+  return null;
+};
+
+// Renders the footer for the bottom sheet with a button to toggle review form or a message to sign in.
+const ListFooterComponent = ({
+  user,
+  selectedShop,
+  reviewFormVisible,
+  setReviewFormVisible,
+}) => {
+  return user ? (
+    !reviewFormVisible ? (
+      <View style={styles.buttonContainer}>
+        <Pressable
+          style={styles.toggleReviewForm}
+          onPress={() => setReviewFormVisible(true)}
+        >
+          <Text style={styles.toggleReviewFormText}>Write a review</Text>
+        </Pressable>
+      </View>
+    ) : (
+      <ReviewForm
+        selectedShop={selectedShop}
+        setReviewFormVisible={setReviewFormVisible}
+      />
+    )
+  ) : (
+    <View style={styles.noAccessContainer}>
+      <Text style={styles.noAccessText}>
+        Please sign in to see and write reviews.
+      </Text>
+    </View>
+  );
+};
 
 // Bottom sheet component
 const CoffeeShopBottomSheet = ({
@@ -70,92 +155,27 @@ const CoffeeShopBottomSheet = ({
       {selectedShop && (
         <>
           <BottomSheetView style={styles.bottomSheetContent}>
-            <View style={styles.shopHeader}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.shopName}>{selectedShop.name}</Text>
-                <Text style={styles.shopAddress}>
-                  {selectedShop.location.address || "No address available."}
-                </Text>
-                <Text style={styles.distance}>
-                  {formatDistance(selectedShop.distance)}
-                </Text>
-              </View>
-              {user && (
-                <FavoriteButton
-                  onPress={onPressFavoriteButton}
-                  isFavorite={isFavorite}
-                />
-              )}
-            </View>
+            <ShopHeader
+              selectedShop={selectedShop}
+              user={user}
+              isFavorite={isFavorite}
+              onPressFavoriteButton={onPressFavoriteButton}
+            />
           </BottomSheetView>
           <BottomSheetFlatList
             data={[
               { type: "photos", data: selectedShop.photos },
               { type: "reviews", data: filteredReviews },
             ]}
-            renderItem={({ item }) => {
-              if (item.type === "photos") {
-                return (
-                  <View>
-                    <Text style={styles.sectionHeader}>Photos</Text>
-                    {item.data && item.data.length > 0 ? (
-                      item.data.map((photo) => renderPhotoItem({ item: photo }))
-                    ) : (
-                      <Text style={styles.noDataText}>
-                        No photos available for this coffee shop.
-                      </Text>
-                    )}
-                  </View>
-                );
-              } else if (item.type === "reviews") {
-                return (
-                  <View>
-                    <Text style={styles.sectionHeader}>Reviews</Text>
-                    {user &&
-                      (item.data && item.data.length > 0 ? (
-                        item.data.map((review) => (
-                          <ReviewItem
-                            item={review}
-                            key={review.id}
-                            shopSelected={true}
-                          />
-                        ))
-                      ) : (
-                        <Text style={styles.noDataText}>
-                          No reviews available for this coffee shop.
-                        </Text>
-                      ))}
-                  </View>
-                );
-              }
-            }}
+            renderItem={({ item }) => renderReviewItem({ item, user })}
             keyExtractor={(item, index) => item.type + index}
             ListFooterComponent={
-              user ? (
-                !reviewFormVisible ? (
-                  <View style={styles.buttonContainer}>
-                    <Pressable
-                      style={styles.toggleReviewForm}
-                      onPress={() => setReviewFormVisible(true)}
-                    >
-                      <Text style={styles.toggleReviewFormText}>
-                        Write a review
-                      </Text>
-                    </Pressable>
-                  </View>
-                ) : (
-                  <ReviewForm
-                    selectedShop={selectedShop}
-                    setReviewFormVisible={setReviewFormVisible}
-                  />
-                )
-              ) : (
-                <View style={styles.noAccessContainer}>
-                  <Text style={styles.noAccessText}>
-                    Please sign in to see and write reviews.
-                  </Text>
-                </View>
-              )
+              <ListFooterComponent
+                user={user}
+                selectedShop={selectedShop}
+                reviewFormVisible={reviewFormVisible}
+                setReviewFormVisible={setReviewFormVisible}
+              />
             }
           />
         </>
