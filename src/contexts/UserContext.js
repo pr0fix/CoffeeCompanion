@@ -28,14 +28,16 @@ export const UserProvider = ({ children }) => {
   // Listen for authentication state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
       if (currentUser) {
+        setUser(currentUser);
+        setLoading(false);
         await getUserFavorites(currentUser.uid, setFavorites);
         getAllReviews(setReviews);
       } else {
+        setUser(null);
         setReviews([]);
         setFavorites([]);
+        setLoading(false);
       }
     });
 
@@ -48,9 +50,7 @@ export const UserProvider = ({ children }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
-      throw error;
-    } finally {
-      setLoading(false);
+      console.error("Error signing in:", error);
     }
   };
 
@@ -64,9 +64,7 @@ export const UserProvider = ({ children }) => {
         });
       }
     } catch (error) {
-      throw error;
-    } finally {
-      setLoading(false);
+      console.error("Error signing up:", error);
     }
   };
 
@@ -77,21 +75,22 @@ export const UserProvider = ({ children }) => {
       await signOut(auth);
     } catch (error) {
       console.error("Error signing out:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
+  // Function to edit user profile details (currently only the name displayed in profile)
+  // todo: add email change, password change & possibility to add user bio
   const editProfile = async (fullName) => {
     try {
-      setLoading(true);
-      if (fullName !== user.displayName) {
+      if (user && fullName !== user.displayName) {
         await updateProfile(user, { displayName: fullName });
+        setUser((prevUser) => ({ ...prevUser, displayName: fullName }));
+        return true;
       }
+      return false;
     } catch (error) {
       console.error("Error updating profile:", error.message);
-    } finally {
-      setLoading(false);
+      return false;
     }
   };
 
@@ -128,7 +127,6 @@ export const UserProvider = ({ children }) => {
     <UserContext.Provider
       value={{
         user,
-        loading,
         reviews,
         favorites,
         signIn,
