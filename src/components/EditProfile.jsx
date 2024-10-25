@@ -10,6 +10,7 @@ import useEditProfile from "../hooks/useEditProfile";
 import * as yup from "yup";
 import { Formik } from "formik";
 import { useUser } from "../contexts/UserContext";
+import { useNotification } from "../contexts/NotificationContext";
 
 // Validation schema for edit profile form
 const editProfileValidationSchema = yup.object().shape({
@@ -19,13 +20,26 @@ const editProfileValidationSchema = yup.object().shape({
     .required("Full name is required"),
 });
 
-const EditProfile = () => {
+const EditProfile = ({ navigation }) => {
   const { user } = useUser();
   const { handleEditProfile, error, loading } = useEditProfile();
+  const { addNotification } = useNotification();
 
-  const onSubmit = (values) => {
-    console.log(values);
-    handleEditProfile(values.fullName);
+  const onSubmit = async (values) => {
+    try {
+      const changesMade = await handleEditProfile(values.fullName);
+      if (changesMade) {
+        navigation.navigate("Profile");
+        addNotification("Profile updated successfully!", "success");
+      } else {
+        navigation.navigate("Profile");
+        addNotification("No changes were made to your profile.", "info");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      navigation.navigate("Profile");
+      addNotification("Profile updating failed!", "error");
+    }
   };
 
   return (
@@ -84,7 +98,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#f9f9f9",
   },
   form: {
     backgroundColor: "#fff",
@@ -124,14 +137,15 @@ const styles = StyleSheet.create({
   submitButton: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 14,
-    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
     backgroundColor: "#0366d6",
   },
   submitButtonText: {
-    color: "#fff",
+    color: "white",
     fontWeight: "bold",
-    fontSize: 16,
   },
 });
 

@@ -53,8 +53,8 @@ const UserProfile = ({ navigation }) => {
               source={"source"}
               resizeMode={"cover"}
             />
-            <Text>{user.displayName}</Text>
-            <Text>{user.email}</Text>
+            <Text style={styles.displayName}>{user.displayName}</Text>
+            <Text style={styles.email}>{user.email}</Text>
           </View>
         );
       case "reviews":
@@ -116,6 +116,15 @@ const styles = StyleSheet.create({
   profileContainer: {
     flex: 1,
     alignItems: "center",
+  },
+  displayName: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginTop: 10,
+  },
+  email: {
+    fontSize: 16,
+    color: "gray",
   },
   editButton: {
     marginTop: 5,
