@@ -82,6 +82,19 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const editProfile = async (fullName) => {
+    try {
+      setLoading(true);
+      if (fullName !== user.displayName) {
+        await updateProfile(user, { displayName: fullName });
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Handler function for adding a new review, which provides data to db-service function
   const addReviewHandler = async (shopId, shopName, address, reviewText) => {
     try {
@@ -121,6 +134,7 @@ export const UserProvider = ({ children }) => {
         signIn,
         signUp,
         signout,
+        editProfile,
         addReview: addReviewHandler,
         addFavorite: addFavoriteHandler,
         removeFavorite: removeFavoriteHandler,

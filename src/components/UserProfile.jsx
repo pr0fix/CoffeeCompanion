@@ -65,7 +65,7 @@ const UserProfile = ({ navigation }) => {
               data={item.data}
               renderItem={({ item }) => <ReviewItem item={item} />}
               keyExtractor={(item) => item.id}
-              scrollEnabled={false} // Disable inner FlatList scrolling
+              scrollEnabled={false}
             />
           </View>
         ) : (
@@ -77,9 +77,15 @@ const UserProfile = ({ navigation }) => {
             <Text style={styles.dataHeader}>Your Favorites</Text>
             <FlatList
               data={item.data}
-              renderItem={({ item }) => <FavoriteItem item={item} userId={user.uid} favorites={favorites}/>}
+              renderItem={({ item }) => (
+                <FavoriteItem
+                  item={item}
+                  userId={user.uid}
+                  favorites={favorites}
+                />
+              )}
               keyExtractor={(item) => item.id}
-              scrollEnabled={false} // Disable inner FlatList scrolling
+              scrollEnabled={false}
             />
           </View>
         ) : (

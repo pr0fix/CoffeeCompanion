@@ -1,11 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import {
-  Alert,
-  Linking,
-  SafeAreaView,
-  StyleSheet,
-  View,
-} from "react-native";
+import { Alert, Linking, SafeAreaView, StyleSheet, View } from "react-native";
 import { Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import * as Location from "expo-location";
@@ -93,6 +87,8 @@ const Map = () => {
 
   // Fetch user location and coffee shops with photos on component mount
   useEffect(() => {
+    let locationSubscription;
+
     const fetchData = async () => {
       try {
         const hasPermission = await requestLocationPermission();
@@ -110,12 +106,40 @@ const Map = () => {
           userLocation.longitude
         );
         setCoffeeShops(shopsWithPhotos);
+
+        locationSubscription = await Location.watchPositionAsync(
+          {
+            accuracy: Location.Accuracy.High,
+            distanceInterval: 10,
+          },
+          async (newLocation) => {
+            const { latitude, longitude } = newLocation.coords;
+            setRegion({
+              latitude,
+              longitude,
+              latitudeDelta: 0.0322,
+              longitudeDelta: 0.0221,
+            });
+
+            const updatedShopsWithPhotos = await getCoffeeShopsWithPhotos(
+              latitude,
+              longitude
+            );
+            setCoffeeShops(updatedShopsWithPhotos);
+          }
+        );
       } catch (err) {
         console.error("Error fetching location or coffee shops", err);
       }
     };
 
     fetchData();
+
+    return () => {
+      if (locationSubscription) {
+        locationSubscription.remove();
+      }
+    };
   }, []);
 
   // Handle marker press to show the bottom sheet
