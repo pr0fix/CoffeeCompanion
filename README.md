@@ -5,7 +5,7 @@ CoffeeCompanion is your go-to mobile app for finding nearby coffee shops!
 ## Features
 
 - **Nearby coffee shops on map**: Fetches coffee shops near your location from the Foursquare Places API, showing them on the map as points of interest.
-- **Create an account**: Sign up for free to unlock the full benefits of CoffeeCompanion.
+- **Create an account**: Sign up for free to unlock the benefits of CoffeeCompanion.
 - **Review your favorite coffee shops**: Share your thoughts and reviews of your favorite coffee shops for others to see and interact with.
 - **Add coffee shops to favorites**: Save coffee shops to your personal favorites list for quick access.
 

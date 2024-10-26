@@ -1,16 +1,22 @@
 import { useState } from "react";
 import { useUser } from "../contexts/UserContext";
 
+// Custom hook to handle user sign in
 const useSignIn = () => {
+  const { signIn } = useUser();
+  const [loading, setLoading] = useState(null);
   const [error, setError] = useState(null);
-  const { signIn, loading } = useUser();
 
+  // Function to handle user sign in
   const handleSignIn = async (email, password) => {
+    setLoading(true);
+    setError(null);
     try {
-      setError(null);
       await signIn(email, password);
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 

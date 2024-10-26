@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useUser } from "../contexts/UserContext";
 
+// Custom hook to handle submitting a review
 const useSubmitReview = () => {
+  const { addReview } = useUser();
+  const [loading, setLoading] = useState(null);
   const [error, setError] = useState(null);
-  const { addReview, loading } = useUser();
 
+  // Function to handle submitting a review
   const handleSubmitReview = async (
     shopId,
     shopName,
@@ -12,14 +15,17 @@ const useSubmitReview = () => {
     reviewText,
     onSuccess
   ) => {
+    setLoading(true);
+    setError(null);
     try {
-      setError(null);
       await addReview(shopId, shopName, shopAddress, reviewText);
       if (onSuccess) {
         onSuccess();
       }
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
   return { handleSubmitReview, error, loading };

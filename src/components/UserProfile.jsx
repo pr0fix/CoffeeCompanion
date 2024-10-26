@@ -53,8 +53,8 @@ const UserProfile = ({ navigation }) => {
               source={"source"}
               resizeMode={"cover"}
             />
-            <Text>{user.displayName}</Text>
-            <Text>{user.email}</Text>
+            <Text style={styles.displayName}>{user.displayName}</Text>
+            <Text style={styles.email}>{user.email}</Text>
           </View>
         );
       case "reviews":
@@ -65,7 +65,7 @@ const UserProfile = ({ navigation }) => {
               data={item.data}
               renderItem={({ item }) => <ReviewItem item={item} />}
               keyExtractor={(item) => item.id}
-              scrollEnabled={false} // Disable inner FlatList scrolling
+              scrollEnabled={false}
             />
           </View>
         ) : (
@@ -77,9 +77,15 @@ const UserProfile = ({ navigation }) => {
             <Text style={styles.dataHeader}>Your Favorites</Text>
             <FlatList
               data={item.data}
-              renderItem={({ item }) => <FavoriteItem item={item} userId={user.uid} favorites={favorites}/>}
+              renderItem={({ item }) => (
+                <FavoriteItem
+                  item={item}
+                  userId={user.uid}
+                  favorites={favorites}
+                />
+              )}
               keyExtractor={(item) => item.id}
-              scrollEnabled={false} // Disable inner FlatList scrolling
+              scrollEnabled={false}
             />
           </View>
         ) : (
@@ -110,6 +116,15 @@ const styles = StyleSheet.create({
   profileContainer: {
     flex: 1,
     alignItems: "center",
+  },
+  displayName: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginTop: 10,
+  },
+  email: {
+    fontSize: 16,
+    color: "gray",
   },
   editButton: {
     marginTop: 5,

@@ -1,25 +1,35 @@
 import { useState } from "react";
 import { useUser } from "../contexts/UserContext";
 
+// Custom hook to handle adding and removing favorites
 const useAddFavorite = () => {
-  const { addFavorite, removeFavorite, loading } = useUser();
+  const { addFavorite, removeFavorite } = useUser();
+  const [loading, setLoading] = useState(null);
   const [error, setError] = useState(null);
 
+  // Function to add a shop to favorites
   const handleAddFavorite = async (userId, shopId, shopName, address) => {
+    setLoading(true);
+    setError(null);
     try {
       await addFavorite(userId, shopId, shopName, address);
-      console.log("Added to favorites");
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Function to remove a shop from favorites
   const handleRemoveFavorite = async (userId, shopId) => {
+    setLoading(true);
+    setError(null);
     try {
       await removeFavorite(userId, shopId);
-      console.log("Removed from favorites");
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 

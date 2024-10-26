@@ -12,8 +12,11 @@ import useSignUp from "../hooks/useSignUp";
 
 // Validator for fields in sign up form
 const signupValidationSchema = yup.object().shape({
-  fullName: yup.string().min(2).required("Full name is required"),
-  email: yup.string().required("Email is required"),
+  fullName: yup
+    .string()
+    .min(2, "Name must be at least 2 characters long.")
+    .required("Full name is required"),
+  email: yup.string().email().required("Email is required"),
   password: yup
     .string()
     .required("Password is required")
