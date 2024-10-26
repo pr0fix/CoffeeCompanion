@@ -129,6 +129,7 @@ export const UserProvider = ({ children }) => {
         user,
         reviews,
         favorites,
+        loading,
         signIn,
         signUp,
         signout,

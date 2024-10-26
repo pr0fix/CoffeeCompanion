@@ -12,7 +12,6 @@ const UserProfileScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
     backgroundColor: "white",
     flex: 1,
   },
