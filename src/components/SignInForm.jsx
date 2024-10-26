@@ -9,6 +9,7 @@ import {
 import * as yup from "yup";
 import { Formik } from "formik";
 import useSignIn from "../hooks/useSignIn";
+import { useNotification } from "../contexts/NotificationContext";
 
 // Validator for fields in sign in form
 const signInValidationSchema = yup.object().shape({
@@ -19,13 +20,22 @@ const signInValidationSchema = yup.object().shape({
 // Sign-in form component
 const SignInForm = ({ navigation }) => {
   const { handleSignIn, error, loading } = useSignIn();
+  const { addNotification } = useNotification();
+  const onSubmit = (values) => {
+    const signedIn = handleSignIn(values.email, values.password);
+    if (signedIn) {
+      addNotification("Signed in successfully!", "success");
+    } else {
+      addNotification("Error signing in. Please try again.", "error");
+    }
+  };
 
   return (
     <View>
       <Formik
         validationSchema={signInValidationSchema}
         initialValues={{ email: "", password: "" }}
-        onSubmit={(values) => handleSignIn(values.email, values.password)}
+        onSubmit={(values) => onSubmit(values)}
       >
         {({
           handleChange,

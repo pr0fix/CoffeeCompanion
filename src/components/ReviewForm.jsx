@@ -9,6 +9,7 @@ import {
 import { Formik } from "formik";
 import * as yup from "yup";
 import useSubmitReview from "../hooks/useSubmitReview";
+import { useNotification } from "../contexts/NotificationContext";
 
 // Validation schema for review form
 const reviewValidationSchema = yup.object().shape({
@@ -18,21 +19,31 @@ const reviewValidationSchema = yup.object().shape({
 // Review form component
 const ReviewForm = ({ selectedShop, setReviewFormVisible }) => {
   const { handleSubmitReview, loading } = useSubmitReview();
+  const { addNotification } = useNotification();
+
+  const onSubmit = (values) => {
+    const reviewSubmitted = handleSubmitReview(
+      selectedShop.fsq_id,
+      selectedShop.name,
+      selectedShop.location.address || "No address available.",
+      values.reviewText,
+      () => {
+        setReviewFormVisible(false);
+      }
+    );
+    if (reviewSubmitted) {
+      addNotification("Review submitted successfully!", "success");
+    } else {
+      addNotification("Error submitting review. Please try again.", "error");
+    }
+  };
 
   return (
     <View style={styles.formContainer}>
       <Formik
         initialValues={{ reviewText: "" }}
         validationSchema={reviewValidationSchema}
-        onSubmit={(values) =>
-          handleSubmitReview(
-            selectedShop.fsq_id,
-            selectedShop.name,
-            selectedShop.location.address || "No address available.",
-            values.reviewText,
-            () => setReviewFormVisible(false)
-          )
-        }
+        onSubmit={(values) => onSubmit(values)}
       >
         {({
           handleChange,

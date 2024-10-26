@@ -9,6 +9,7 @@ import {
 import * as yup from "yup";
 import { Formik } from "formik";
 import useSignUp from "../hooks/useSignUp";
+import { useNotification } from "../contexts/NotificationContext";
 
 // Validator for fields in sign up form
 const signupValidationSchema = yup.object().shape({
@@ -34,6 +35,20 @@ const signupValidationSchema = yup.object().shape({
 // Sign-up form component
 const SignUpForm = ({ navigation }) => {
   const { handleSignUp, error, loading } = useSignUp();
+  const { addNotification } = useNotification();
+  const onSubmit = (values) => {
+    const signedUp = handleSignUp(
+      values.fullName,
+      values.email,
+      values.password
+    );
+    if (signedUp) {
+      addNotification(
+        `Signed up successfully! Welcome, ${values.fullName}!`,
+        "success"
+      );
+    }
+  };
 
   return (
     <View>
@@ -45,9 +60,7 @@ const SignUpForm = ({ navigation }) => {
           password: "",
           passwordConfirm: "",
         }}
-        onSubmit={(values) =>
-          handleSignUp(values.fullName, values.email, values.password)
-        }
+        onSubmit={(values) => onSubmit(values)}
       >
         {({
           handleChange,
