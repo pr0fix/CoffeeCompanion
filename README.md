@@ -67,27 +67,14 @@ Once the development server is running, you can scan the QR code displayed in th
 
 coming soon...
 
-## Technologies used
+## Technologies Used
 
 CoffeeCompanion is built using the following technologies:
+- **Frontend**: React Native, Expo
+- **Location & Mapping**: Expo Location, Foursquare Places API, React Native Maps
+- **Authentication & Storage**: Firebase, Async Storage
+- **Forms & Validation**: Formik, Yup
+- **UI Components**: React Native Gesture Handler, React Native Bottom Sheet, React Native Vector Icons 
 
-- **React Native**: A framework for building native apps using React.
-- **Expo**: A framework and platform for universal React applications.
-- **Expo Location**: Allows reading geolocation information from the device.
-- **Expo Image Picker**: Provides access to the system's UI for selecting images from the phone's library.
-- **Foursquare Places API**: Used to fetch nearby coffee shops based on the user's location.
-- **Firebase**: For user authentication and data storage.
-- **Axios**: For making API requests.
-- **Formik**: A library for building forms in React with ease.
-- **Yup**: A schema validation library for Formik to handle form validations.
-- **React Navigation**: A routing and navigation library for React Native.
-- **React Native Dotenv**: Babel plugin for injecting environment variables into JS environment.
-- **React Native Maps**: A library for displaying maps in React Native applications.
-- **React Native Vector Icons**: A library that provides customizable icons for React Native.
-- **React Native Map Clustering**: React Native module that handles map marker clustering.
-- **React Native Bottom Sheet**: A performant interactive bottom sheet with fully configurable options.
-- **React Native Gesture Handler**: Provides a more comprehensive, low level abstraction for the Animated library API.
-- **React Native Reanimated**: Provides native-driven gesture management APIs for building best possible touch-based experiences in React Native.
-- **Async Storage**: Storage system for React Native.
 
 These technologies work together to create a seamless and efficient user experience in finding nearby coffee shops.
