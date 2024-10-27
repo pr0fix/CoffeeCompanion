@@ -1,5 +1,21 @@
-import { database } from "./firebaseConfig";
+import { getDownloadURL, uploadBytes } from "firebase/storage";
+import { database, storage } from "./firebaseConfig";
 import { onValue, push, ref, remove, set } from "firebase/database";
+import { ref as sRef } from "firebase/storage";
+
+// Function to add users profile picture to firebase storage
+export const addProfilePicture = async (user, profileImageBlob) => {
+  if (!user || !profileImageBlob) return;
+  try {
+    const imageRef = sRef(storage, `profileImages/${user.uid}`);
+    await uploadBytes(imageRef, profileImageBlob);
+    const imageUrl = await getDownloadURL(imageRef);
+    return imageUrl;
+  } catch (error) {
+    console.error("Error adding profile picture:", error);
+    return null;
+  }
+};
 
 // Function to add a review to firebase db
 export const addReview = async (
@@ -48,7 +64,7 @@ export const getAllReviews = (setReviews) => {
   });
 };
 
-// Function to fetch user favorites
+// Function to fetch user favorites from db
 export const getUserFavorites = async (userId, setFavorites) => {
   const favoritesRef = ref(database, `users/${userId}/favorites`);
 
@@ -66,7 +82,7 @@ export const getUserFavorites = async (userId, setFavorites) => {
   });
 };
 
-// Function for user to add a cafe to favorites
+// Function to add favorite cafes to db
 export const addToFavorites = async (userId, shopId, shopName, address) => {
   const validAddress = address || "No address available.";
   const favoriteRef = ref(database, `users/${userId}/favorites/${shopId}`);
@@ -80,7 +96,7 @@ export const addToFavorites = async (userId, shopId, shopName, address) => {
   }
 };
 
-// Function to remove a cafe from favorites
+// Function to remove favorite cafes from db
 export const removeFromFavorites = async (userId, shopId) => {
   const favoriteRef = ref(database, `users/${userId}/favorites/${shopId}`);
   try {

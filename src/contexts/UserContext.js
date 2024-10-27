@@ -13,6 +13,7 @@ import {
   getUserFavorites,
   addToFavorites,
   removeFromFavorites,
+  addProfilePicture,
 } from "../api/databaseService";
 
 // Create the context
@@ -28,22 +29,22 @@ export const UserProvider = ({ children }) => {
   // Listen for authentication state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setLoading(true);
       if (currentUser) {
         setUser(currentUser);
-        setLoading(false);
         await getUserFavorites(currentUser.uid, setFavorites);
         getAllReviews(setReviews);
       } else {
         setUser(null);
         setReviews([]);
         setFavorites([]);
-        setLoading(false);
       }
+      setLoading(false);
     });
 
     // Clean up subscription on unmount
     return () => unsubscribe();
-  }, []);
+  }, [auth]);
 
   // Function to sign in a user
   const signIn = async (email, password) => {
@@ -80,16 +81,37 @@ export const UserProvider = ({ children }) => {
 
   // Function to edit user profile details (currently only the name displayed in profile)
   // todo: add email change, password change & possibility to add user bio
-  const editProfile = async (fullName) => {
+  const editProfile = async (fullName, profileImageURI) => {
     try {
-      if (user && fullName !== user.displayName) {
-        await updateProfile(user, { displayName: fullName });
-        setUser((prevUser) => ({ ...prevUser, displayName: fullName }));
+      if (!user || !user.uid) {
+        console.error("User object is invalid or not logged in");
+        return false;
+      }
+
+      let profileImageUrl = user.photoURL;
+
+      if (profileImageURI) {
+        const response = await fetch(profileImageURI);
+        const blob = await response.blob();
+        profileImageUrl = await addProfilePicture(user, blob);
+      }
+
+      const updates = {};
+      if (fullName && fullName !== user.displayName) {
+        updates.displayName = fullName;
+      }
+      if (profileImageUrl && profileImageUrl !== user.photoURL) {
+        updates.photoURL = profileImageUrl;
+      }
+
+      if (Object.keys(updates).length > 0) {
+        await updateProfile(auth.currentUser, updates);
+        setUser((prevUser) => ({ ...prevUser, ...updates }));
         return true;
       }
       return false;
     } catch (error) {
-      console.error("Error updating profile:", error.message);
+      console.error("Error updating profile:", error);
       return false;
     }
   };

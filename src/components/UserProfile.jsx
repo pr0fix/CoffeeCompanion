@@ -16,7 +16,7 @@ import FavoriteItem from "./FavoriteItem";
 // User profile component
 const UserProfile = ({ navigation }) => {
   const { user, reviews, favorites, loading } = useUser();
-  const { handleSignOut, error } = useSignOut();
+  const { handleSignOut } = useSignOut();
 
   // Sets the options for header so that the "Edit Profile" is placed in the rightmost side of the header bar
   useLayoutEffect(() => {
@@ -32,10 +32,13 @@ const UserProfile = ({ navigation }) => {
     });
   }, [navigation]);
 
+  // Show loading indicator while fetching user data
   if (loading) return <ActivityIndicator size="large" color="white" />;
 
+  // Filter reviews and favorites by the current user
   const userReviews = reviews.filter((review) => review.userId === user.uid);
 
+  // Data for the user profile flatlist
   const data = [
     { type: "profile" },
     { type: "reviews", data: userReviews },
@@ -43,6 +46,7 @@ const UserProfile = ({ navigation }) => {
     { type: "signOut" },
   ];
 
+  // Render item switch for the flatlist
   const renderItem = ({ item }) => {
     switch (item.type) {
       case "profile":
@@ -50,7 +54,7 @@ const UserProfile = ({ navigation }) => {
           <View style={styles.profileContainer}>
             <Image
               style={styles.image}
-              source={"source"}
+              source={{ uri: user.photoURL }}
               resizeMode={"cover"}
             />
             <Text style={styles.displayName}>{user.displayName}</Text>

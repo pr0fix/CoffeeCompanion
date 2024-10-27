@@ -2,6 +2,7 @@ import React from "react";
 import { useNotification } from "../contexts/NotificationContext";
 import { StyleSheet, Text, View } from "react-native";
 
+// Notification component
 const Notification = () => {
   const { notification } = useNotification();
 

@@ -21,6 +21,8 @@ const signInValidationSchema = yup.object().shape({
 const SignInForm = ({ navigation }) => {
   const { handleSignIn, error, loading } = useSignIn();
   const { addNotification } = useNotification();
+
+  // Handle sign in form submit
   const onSubmit = (values) => {
     const signedIn = handleSignIn(values.email, values.password);
     if (signedIn) {

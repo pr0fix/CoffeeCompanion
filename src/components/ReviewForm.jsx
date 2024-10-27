@@ -21,6 +21,7 @@ const ReviewForm = ({ selectedShop, setReviewFormVisible }) => {
   const { handleSubmitReview, loading } = useSubmitReview();
   const { addNotification } = useNotification();
 
+  // Handle review form submit
   const onSubmit = (values) => {
     const reviewSubmitted = handleSubmitReview(
       selectedShop.fsq_id,
