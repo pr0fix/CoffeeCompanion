@@ -73,6 +73,8 @@ CoffeeCompanion is built using the following technologies:
 
 - **React Native**: A framework for building native apps using React.
 - **Expo**: A framework and platform for universal React applications.
+- **Expo Location**: Allows reading geolocation information from the device.
+- **Expo Image Picker**: Provides access to the system's UI for selecting images from the phone's library.
 - **Foursquare Places API**: Used to fetch nearby coffee shops based on the user's location.
 - **Firebase**: For user authentication and data storage.
 - **Axios**: For making API requests.
