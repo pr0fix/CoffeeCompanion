@@ -12,9 +12,15 @@ const useSignUp = () => {
     setLoading(true);
     setError(null);
     try {
-      await signUp(fullName, email, password);
+      const signUpSuccessful = await signUp(fullName, email, password);
+      if (signUpSuccessful) {
+        return true;
+      }
+      setError("Sign up failed. Please try again.");
+      return false;
     } catch (err) {
       setError(err.message);
+      return false;
     } finally {
       setLoading(false);
     }

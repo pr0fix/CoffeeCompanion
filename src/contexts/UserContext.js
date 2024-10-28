@@ -50,8 +50,10 @@ export const UserProvider = ({ children }) => {
   const signIn = async (email, password) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      return true;
     } catch (error) {
       console.error("Error signing in:", error);
+      return false;
     }
   };
 
@@ -63,9 +65,11 @@ export const UserProvider = ({ children }) => {
         await updateProfile(res.user, {
           displayName: fullName,
         });
+        return true;
       }
     } catch (error) {
       console.error("Error signing up:", error);
+      return false;
     }
   };
 

@@ -23,12 +23,12 @@ const SignInForm = ({ navigation }) => {
   const { addNotification } = useNotification();
 
   // Handle sign in form submit
-  const onSubmit = (values) => {
-    const signedIn = handleSignIn(values.email, values.password);
+  const onSubmit = async (values) => {
+    const signedIn = await handleSignIn(values.email, values.password);
     if (signedIn) {
       addNotification("Signed in successfully!", "success");
     } else {
-      addNotification("Error signing in. Please try again.", "error");
+      addNotification(`${error}`, "error");
     }
   };
 
@@ -96,7 +96,6 @@ const SignInForm = ({ navigation }) => {
           </View>
         )}
       </Formik>
-      {error ? <Text>{error}</Text> : null}
     </View>
   );
 };

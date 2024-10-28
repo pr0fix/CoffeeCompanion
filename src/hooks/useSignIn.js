@@ -12,9 +12,15 @@ const useSignIn = () => {
     setLoading(true);
     setError(null);
     try {
-      await signIn(email, password);
+      const signInSuccessful = await signIn(email, password);
+      if (signInSuccessful) {
+        return true;
+      }
+      setError("Incorrect email or password.");
+      return false;
     } catch (err) {
-      setError(err.message);
+      setError("Incorrect email or password.");
+      return false;
     } finally {
       setLoading(false);
     }

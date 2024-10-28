@@ -17,7 +17,10 @@ const signupValidationSchema = yup.object().shape({
     .string()
     .min(2, "Name must be at least 2 characters long.")
     .required("Full name is required"),
-  email: yup.string().email().required("Email is required"),
+  email: yup
+    .string()
+    .email("Email must be valid")
+    .required("Email is required"),
   password: yup
     .string()
     .required("Password is required")
@@ -38,8 +41,8 @@ const SignUpForm = ({ navigation }) => {
   const { addNotification } = useNotification();
 
   // Handle sign up form submit
-  const onSubmit = (values) => {
-    const signedUp = handleSignUp(
+  const onSubmit = async (values) => {
+    const signedUp = await handleSignUp(
       values.fullName,
       values.email,
       values.password
@@ -49,6 +52,8 @@ const SignUpForm = ({ navigation }) => {
         `Signed up successfully! Welcome, ${values.fullName}!`,
         "success"
       );
+    } else {
+      addNotification(`${error}`, "error");
     }
   };
 
