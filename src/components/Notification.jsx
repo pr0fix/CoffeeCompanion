@@ -20,7 +20,7 @@ const Notification = () => {
 const styles = StyleSheet.create({
   notificationContainer: {
     position: "absolute",
-    top: 100,
+    top: 90,
     left: 10,
     right: 10,
     zIndex: 1000,
