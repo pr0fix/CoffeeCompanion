@@ -53,7 +53,7 @@ const fetchCoffeeShopPhotos = async (shopId) => {
       }
     );
 
-    if (response.data) {
+    if (response.data && response.data.length > 0) {
       const photos = response.data.map((photo) => ({
         id: photo.id,
         url: `${photo.prefix}${PHOTO_SIZE}${photo.suffix}`,
@@ -61,11 +61,15 @@ const fetchCoffeeShopPhotos = async (shopId) => {
       }));
 
       await cachePhotos(shopId, photos);
-      return photos;
+      return [];
     }
-    return [];
+    await cachePhotos(shopId, []);
+    return photos;
   } catch (error) {
-    console.error(`Error fetching photos for shopId ${shopId}:`, error);
+    if (error.response && error.response.status !== 404) {
+      console.warn(`Error fetching photos for shopId ${shopId}:`, error);
+    }
+    await cachePhotos(shopId, []);
     return [];
   }
 };

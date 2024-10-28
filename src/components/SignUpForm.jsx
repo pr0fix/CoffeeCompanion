@@ -36,6 +36,8 @@ const signupValidationSchema = yup.object().shape({
 const SignUpForm = ({ navigation }) => {
   const { handleSignUp, error, loading } = useSignUp();
   const { addNotification } = useNotification();
+
+  // Handle sign up form submit
   const onSubmit = (values) => {
     const signedUp = handleSignUp(
       values.fullName,

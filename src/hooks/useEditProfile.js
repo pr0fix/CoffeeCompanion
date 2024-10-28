@@ -8,11 +8,11 @@ const useEditProfile = () => {
   const [error, setError] = useState(null);
 
   // Function to handle editing user profile
-  const handleEditProfile = async (fullName) => {
+  const handleEditProfile = async (fullName, profileImage) => {
     setLoading(true);
     setError(null);
     try {
-      const wasUpdated = await editProfile(fullName);
+      const wasUpdated = await editProfile(fullName, profileImage);
       if (wasUpdated) {
         return true;
       }
