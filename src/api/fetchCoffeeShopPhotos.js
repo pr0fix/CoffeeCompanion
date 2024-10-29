@@ -1,12 +1,12 @@
 import axios from "axios";
 import { FOURSQUARE_BASE_URL, headers } from "./foursquareConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-  CACHE_PREFIX,
-  CACHE_EXPIRATION_TIME,
-  PHOTO_SIZE,
-  CLASSIFICATIONS,
-} from "../constants";
+
+// Constants
+const CACHE_PREFIX = "photos_";
+const CACHE_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+const PHOTO_SIZE = "original";
+const CLASSIFICATIONS = "outdoor,food";
 
 // Helper function to get cached photos for a coffee shop
 const getCachedPhotos = async (shopId) => {
@@ -20,6 +20,7 @@ const getCachedPhotos = async (shopId) => {
         await AsyncStorage.removeItem(`${CACHE_PREFIX}${shopId}`);
       }
     }
+    return null;
   } catch (error) {
     console.error(`Error fetching cached photos for shopId ${shopId}:`, error);
     return null;
@@ -28,12 +29,16 @@ const getCachedPhotos = async (shopId) => {
 
 // Helper function to cache photos for a coffee shop
 const cachePhotos = async (shopId, photos) => {
-  const cacheKey = `${CACHE_PREFIX}${shopId}`;
-  const currentTime = new Date().getTime();
-  await AsyncStorage.setItem(
-    cacheKey,
-    JSON.stringify({ photos, timestamp: currentTime })
-  );
+  try {
+    const cacheKey = `${CACHE_PREFIX}${shopId}`;
+    const currentTime = new Date().getTime();
+    await AsyncStorage.setItem(
+      cacheKey,
+      JSON.stringify({ photos, timestamp: currentTime })
+    );
+  } catch (error) {
+    console.error(`Error caching photos for shopId ${shopId}:`, error);
+  }
 };
 
 // Fetch coffee shops from Foursquare Places API
@@ -61,10 +66,10 @@ const fetchCoffeeShopPhotos = async (shopId) => {
       }));
 
       await cachePhotos(shopId, photos);
-      return [];
+      return photos;
     }
     await cachePhotos(shopId, []);
-    return photos;
+    return [];
   } catch (error) {
     if (error.response && error.response.status !== 404) {
       console.warn(`Error fetching photos for shopId ${shopId}:`, error);
