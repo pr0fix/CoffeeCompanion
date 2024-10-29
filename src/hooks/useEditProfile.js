@@ -4,8 +4,8 @@ import { useUser } from "../contexts/UserContext";
 // Custom hook to handle editing user profile
 const useEditProfile = () => {
   const { editProfile } = useUser();
-  const [loading, setLoading] = useState(null);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   // Function to handle editing user profile
   const handleEditProfile = async (fullName, profileImage) => {

@@ -4,8 +4,8 @@ import { useUser } from "../contexts/UserContext";
 // Custom hook to handle user sign up
 const useSignUp = () => {
   const { signUp } = useUser();
-  const [loading, setLoading] = useState(null);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   // Function to handle user sign up
   const handleSignUp = async (fullName, email, password) => {

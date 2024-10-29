@@ -1,12 +1,12 @@
 import axios from "axios";
 import { FOURSQUARE_BASE_URL, headers } from "./foursquareConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-// Constants
-const CACHE_PREFIX = "photos_";
-const CACHE_EXPIRATION_TIME = 24 * 60 * 60 * 1000;
-const PHOTO_SIZE = "original";
-const CLASSIFICATIONS = "outdoor,food";
+import {
+  CACHE_PREFIX,
+  CACHE_EXPIRATION_TIME,
+  PHOTO_SIZE,
+  CLASSIFICATIONS,
+} from "../constants";
 
 // Helper function to get cached photos for a coffee shop
 const getCachedPhotos = async (shopId) => {

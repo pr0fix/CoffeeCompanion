@@ -6,8 +6,8 @@ import { useNotification } from "../contexts/NotificationContext";
 const useSignOut = () => {
   const { signout } = useUser();
   const { addNotification } = useNotification();
-  const [loading, setLoading] = useState(null);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   // Function to handle user sign out
   const handleSignOut = async () => {

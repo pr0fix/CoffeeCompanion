@@ -4,8 +4,8 @@ import { useUser } from "../contexts/UserContext";
 // Custom hook to handle submitting a review
 const useSubmitReview = () => {
   const { addReview } = useUser();
-  const [loading, setLoading] = useState(null);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   // Function to handle submitting a review
   const handleSubmitReview = async (
