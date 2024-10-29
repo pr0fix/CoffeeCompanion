@@ -10,7 +10,7 @@ const useSignUp = () => {
   // Function to handle user sign up
   const handleSignUp = async (fullName, email, password) => {
     setLoading(true);
-    setError(null);
+    setError("");
     try {
       const signUpSuccessful = await signUp(fullName, email, password);
       if (signUpSuccessful) {

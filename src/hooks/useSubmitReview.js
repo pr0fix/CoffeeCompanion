@@ -16,7 +16,7 @@ const useSubmitReview = () => {
     onSuccess
   ) => {
     setLoading(true);
-    setError(null);
+    setError("");
     try {
       await addReview(shopId, shopName, shopAddress, reviewText);
       if (onSuccess) {

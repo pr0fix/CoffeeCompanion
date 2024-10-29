@@ -51,6 +51,7 @@ const AuthStack = () => {
           elevation: 0,
           shadowOpacity: 0,
         },
+        headerShown: false,
       }}
     >
       <Stack.Screen
