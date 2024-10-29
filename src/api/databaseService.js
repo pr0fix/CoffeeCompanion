@@ -38,7 +38,7 @@ export const addReview = async (
       shopName,
       address,
       text: reviewText,
-      createdAt: new Date().toLocaleDateString(),
+      createdAt: new Date().toISOString(),
     });
     console.log("Review added successfully");
   } catch (error) {

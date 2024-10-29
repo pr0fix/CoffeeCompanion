@@ -2,11 +2,13 @@ import { View, Text, StyleSheet } from "react-native";
 
 // Returns a review item card to be shown in list of reviews
 const ReviewItem = ({ item, shopSelected }) => {
+  const formattedDate = new Date(item.createdAt).toLocaleDateString();
+
   return (
     <View style={styles.reviewCard}>
       <Text style={styles.shopName}>{item.shopName}</Text>
       <Text style={styles.shopAddress}>{item.address}</Text>
-      <Text style={styles.reviewDate}>{item.createdAt}</Text>
+      <Text style={styles.reviewDate}>{formattedDate}</Text>
       {shopSelected && (
         <Text style={styles.username}>Reviewed by: {item.username}</Text>
       )}

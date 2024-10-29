@@ -36,7 +36,9 @@ const UserProfile = ({ navigation }) => {
   if (loading) return <ActivityIndicator size="large" color="white" />;
 
   // Filter reviews and favorites by the current user
-  const userReviews = reviews.filter((review) => review.userId === user.uid);
+  const userReviews = reviews
+    .filter((review) => review.userId === user.uid)
+    .sort((a, b) => b.createdAt - a.createdAt);
 
   // Data for the user profile flatlist
   const data = [
