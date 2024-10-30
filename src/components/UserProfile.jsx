@@ -66,7 +66,7 @@ const UserProfile = ({ navigation }) => {
       case "reviews":
         return item.data && item.data.length > 0 ? (
           <View style={styles.sectionContainer}>
-            <Text style={styles.dataHeader}>Your Reviews</Text>
+            <Text style={styles.dataHeader}>My Reviews</Text>
             <FlatList
               data={item.data}
               renderItem={({ item }) => <ReviewItem item={item} />}
@@ -80,7 +80,7 @@ const UserProfile = ({ navigation }) => {
       case "favorites":
         return item.data && item.data.length > 0 ? (
           <View style={styles.sectionContainer}>
-            <Text style={styles.dataHeader}>Your Favorites</Text>
+            <Text style={styles.dataHeader}>My Favorites</Text>
             <FlatList
               data={item.data}
               renderItem={({ item }) => (

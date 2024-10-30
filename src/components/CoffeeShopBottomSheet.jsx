@@ -151,6 +151,8 @@ const CoffeeShopBottomSheet = ({
       index={0}
       snapPoints={snapPoints}
       enablePanDownToClose={true}
+      keyboardBehavior="interactive"
+      keyboardBlurBehavior="restore"
     >
       {selectedShop && (
         <>

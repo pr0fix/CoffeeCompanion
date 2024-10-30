@@ -58,148 +58,176 @@ const SignUpForm = ({ navigation }) => {
   };
 
   return (
-    <View>
-      <Formik
-        validationSchema={signupValidationSchema}
-        initialValues={{
-          fullName: "",
-          email: "",
-          password: "",
-          passwordConfirm: "",
-        }}
-        onSubmit={(values) => onSubmit(values)}
-      >
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          touched,
-        }) => (
-          <View>
-            <TextInput
-              style={[
-                styles.input,
-                touched.fullName && errors.fullName ? styles.inputError : null,
-              ]}
-              placeholder="Full Name"
-              onChangeText={handleChange("fullName")}
-              onBlur={handleBlur("fullName")}
-              value={values.fullName}
-            />
-            {errors.fullName && touched.fullName && (
-              <Text style={styles.error}>{errors.fullName}</Text>
-            )}
-
-            <TextInput
-              style={[
-                styles.input,
-                touched.email && errors.email ? styles.inputError : null,
-              ]}
-              placeholder="Email"
-              onChangeText={handleChange("email")}
-              onBlur={handleBlur("email")}
-              value={values.email}
-            />
-            {errors.email && touched.email && (
-              <Text style={styles.error}>{errors.email}</Text>
-            )}
-
-            <TextInput
-              style={[
-                styles.input,
-                touched.password && errors.password ? styles.inputError : null,
-              ]}
-              placeholder="Password"
-              secureTextEntry
-              onChangeText={handleChange("password")}
-              onBlur={handleBlur("password")}
-              value={values.password}
-            />
-            {errors.password && touched.password && (
-              <Text style={styles.error}>{errors.password}</Text>
-            )}
-
-            <TextInput
-              style={[
-                styles.input,
-                touched.passwordConfirm && errors.passwordConfirm
-                  ? styles.inputError
-                  : null,
-              ]}
-              placeholder="Password confirmation"
-              secureTextEntry
-              onChangeText={handleChange("passwordConfirm")}
-              onBlur={handleBlur("passwordConfirm")}
-              value={values.passwordConfirm}
-            />
-            {errors.passwordConfirm && touched.passwordConfirm && (
-              <Text style={styles.error}>{errors.passwordConfirm}</Text>
-            )}
-
-            <Pressable
-              style={styles.inputButton}
-              onPress={handleSubmit}
-              disabled={loading}
-            >
-              {loading ? (
-                <ActivityIndicator color="white" />
-              ) : (
-                <Text style={styles.inputButtonText}>Sign up</Text>
+    <View style={styles.screen}>
+      <Text style={styles.header}>Create Your CoffeeCompanion Account</Text>
+      <View style={styles.container}>
+        <Formik
+          validationSchema={signupValidationSchema}
+          initialValues={{
+            fullName: "",
+            email: "",
+            password: "",
+            passwordConfirm: "",
+          }}
+          onSubmit={(values) => onSubmit(values)}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View>
+              <TextInput
+                style={[
+                  styles.input,
+                  touched.fullName && errors.fullName
+                    ? styles.inputError
+                    : null,
+                ]}
+                placeholder="Full Name"
+                placeholderTextColor="#BDB3A0"
+                onChangeText={handleChange("fullName")}
+                onBlur={handleBlur("fullName")}
+                value={values.fullName}
+              />
+              {errors.fullName && touched.fullName && (
+                <Text style={styles.error}>{errors.fullName}</Text>
               )}
-            </Pressable>
-            <Pressable
-              style={styles.signInButton}
-              onPress={() => navigation.navigate("Sign In")}
-            >
-              <Text style={styles.signInButtonText}>
-                Already have an account? Sign In
-              </Text>
-            </Pressable>
-          </View>
-        )}
-      </Formik>
-      {error ? <Text>{error}</Text> : null}
+
+              <TextInput
+                style={[
+                  styles.input,
+                  touched.email && errors.email ? styles.inputError : null,
+                ]}
+                placeholder="Email"
+                placeholderTextColor="#BDB3A0"
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+              />
+              {errors.email && touched.email && (
+                <Text style={styles.error}>{errors.email}</Text>
+              )}
+
+              <TextInput
+                style={[
+                  styles.input,
+                  touched.password && errors.password
+                    ? styles.inputError
+                    : null,
+                ]}
+                placeholder="Password"
+                placeholderTextColor="#BDB3A0"
+                secureTextEntry
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
+              />
+              {errors.password && touched.password && (
+                <Text style={styles.error}>{errors.password}</Text>
+              )}
+
+              <TextInput
+                style={[
+                  styles.input,
+                  touched.passwordConfirm && errors.passwordConfirm
+                    ? styles.inputError
+                    : null,
+                ]}
+                placeholder="Password confirmation"
+                placeholderTextColor="#BDB3A0"
+                secureTextEntry
+                onChangeText={handleChange("passwordConfirm")}
+                onBlur={handleBlur("passwordConfirm")}
+                value={values.passwordConfirm}
+              />
+              {errors.passwordConfirm && touched.passwordConfirm && (
+                <Text style={styles.error}>{errors.passwordConfirm}</Text>
+              )}
+
+              <Pressable
+                style={styles.inputButton}
+                onPress={handleSubmit}
+                disabled={loading}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#FFFFFF" />
+                ) : (
+                  <Text style={styles.inputButtonText}>Sign up</Text>
+                )}
+              </Pressable>
+              <Pressable
+                style={styles.signInButton}
+                onPress={() => navigation.navigate("Sign In")}
+              >
+                <Text style={styles.signInButtonText}>
+                  Already have an account? Sign In
+                </Text>
+              </Pressable>
+            </View>
+          )}
+        </Formik>
+      </View>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
-  input: {
-    height: 60,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 15,
+  screen: {
+    flex: 1,
+    paddingHorizontal: 20,
+    backgroundColor: "#F4ECE3",
+    justifyContent: "center",
   },
-  error: {
-    color: "#d73a4a",
+  container: {
+    paddingVertical: 20,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#6F3E37",
+    lineHeight: 30,
+  },
+  input: {
+    height: 55,
+    borderColor: "#A87544",
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    backgroundColor: "#FFFFFF",
     marginBottom: 10,
   },
+  error: {
+    color: "#D73A4A",
+    marginBottom: 15,
+    paddingHorizontal: 5,
+  },
   inputError: {
-    borderColor: "#d73a4a",
+    borderColor: "#D73A4A",
   },
   inputButton: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: "#0366d6",
+    paddingVertical: 15,
+    borderRadius: 8,
+    backgroundColor: "#A87544",
+    marginTop: 10,
   },
   inputButtonText: {
     color: "white",
     fontWeight: "bold",
+    fontSize: 16,
   },
   signInButton: {
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 25,
   },
   signInButtonText: {
-    color: "#0366d6",
+    color: "#6F3E37",
     fontWeight: "bold",
   },
 });
