@@ -26,21 +26,25 @@ const editProfileValidationSchema = yup.object().shape({
 // Edit profile component
 const EditProfile = ({ navigation }) => {
   const { user } = useUser();
-  const { handleEditProfile, error, loading } = useEditProfile();
+  const { handleEditProfile, loading } = useEditProfile();
   const { addNotification } = useNotification();
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(user?.photoURL || null);
 
   // Handle image upload from device
   const handleImageUpload = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
 
-    if (!result.canceled) {
-      setProfileImage(result.assets[0].uri);
+      if (!result.canceled) {
+        setProfileImage(result.assets[0].uri);
+      }
+    } catch (err) {
+      addNotification("Image upload failed!", "error");
     }
   };
 
@@ -82,6 +86,16 @@ const EditProfile = ({ navigation }) => {
           touched,
         }) => (
           <View style={styles.form}>
+            <View style={styles.imagePickerContainer}>
+              <Pressable onPress={handleImageUpload} style={styles.imagePicker}>
+                {profileImage ? (
+                  <Image source={{ uri: profileImage }} style={styles.image} />
+                ) : (
+                  <Text style={styles.addImageText}>Add Image</Text>
+                )}
+              </Pressable>
+            </View>
+
             <Text style={styles.label}>Full Name</Text>
             <TextInput
               style={[
@@ -97,15 +111,6 @@ const EditProfile = ({ navigation }) => {
               <Text style={styles.error}>{errors.fullName}</Text>
             )}
 
-            <View style={styles.imagePickerContainer}>
-              {profileImage && (
-                <Image source={{ uri: profileImage }} style={styles.image} />
-              )}
-              <Pressable style={styles.imagePicker} onPress={handleImageUpload}>
-                <Text style={styles.submitButtonText}>Pick an image</Text>
-              </Pressable>
-            </View>
-
             <Pressable
               style={styles.submitButton}
               onPress={handleSubmit}
@@ -120,7 +125,6 @@ const EditProfile = ({ navigation }) => {
           </View>
         )}
       </Formik>
-      {error ? <Text>{error}</Text> : null}
     </View>
   );
 };
@@ -128,7 +132,9 @@ const EditProfile = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    backgroundColor: "#F4ECE3",
   },
   form: {
     backgroundColor: "#fff",
@@ -148,10 +154,10 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   input: {
-    height: 50,
-    borderColor: "#ccc",
+    height: 55,
+    borderColor: "#A87544",
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 8,
     paddingHorizontal: 15,
     marginBottom: 15,
     fontSize: 16,
@@ -160,27 +166,24 @@ const styles = StyleSheet.create({
   inputError: {
     borderColor: "#d73a4a",
   },
-  error: {
-    color: "#d73a4a",
-    marginBottom: 10,
-    fontSize: 14,
+  image: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
   },
   imagePicker: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: "#0366d6",
-    marginBottom: 15,
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    borderColor: "#A87544",
+    borderWidth: 2,
+    backgroundColor: "#f9f9f9",
   },
-  image: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    marginBottom: 15,
-    alignSelf: "center",
+  addImageText: {
+    color: "#A87544",
+    fontWeight: "bold",
   },
   submitButton: {
     alignItems: "center",
@@ -189,11 +192,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: "#008000",
+    backgroundColor: "#A87544",
   },
   submitButtonText: {
     color: "white",
     fontWeight: "bold",
+  },
+  imagePickerContainer: {
+    alignItems: "center",
+    marginBottom: 15,
   },
 });
 
