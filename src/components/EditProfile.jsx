@@ -14,6 +14,7 @@ import { useUser } from "../contexts/UserContext";
 import { useNotification } from "../contexts/NotificationContext";
 import useEditProfile from "../hooks/useEditProfile";
 import * as ImagePicker from "expo-image-picker";
+import Icon from "@expo/vector-icons/MaterialIcons";
 
 // Validation schema for edit profile form
 const editProfileValidationSchema = yup.object().shape({
@@ -89,9 +90,22 @@ const EditProfile = ({ navigation }) => {
             <View style={styles.imagePickerContainer}>
               <Pressable onPress={handleImageUpload} style={styles.imagePicker}>
                 {profileImage ? (
-                  <Image source={{ uri: profileImage }} style={styles.image} />
+                  <>
+                    <Image
+                      source={{ uri: profileImage }}
+                      style={styles.image}
+                    />
+                    <View style={styles.cameraIconOverlay}>
+                      <Icon name="camera-alt" size={24} color="white" />
+                    </View>
+                  </>
                 ) : (
-                  <Text style={styles.addImageText}>Add Image</Text>
+                  <>
+                    <Text style={styles.addImageText}>Add Image</Text>
+                    <View style={styles.cameraIconOverlay}>
+                      <Icon name="camera-alt" size={24} color="white" />
+                    </View>
+                  </>
                 )}
               </Pressable>
             </View>
@@ -138,21 +152,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#F4ECE3",
   },
   form: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
+    backgroundColor: "white",
     padding: 20,
-    shadowColor: "#000",
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#E5D3C5",
+    shadowColor: "#6F3E37",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowRadius: 4,
+    elevation: 2,
     marginBottom: 20,
   },
   label: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 10,
-    color: "#333",
+    color: "#6F3E37",
   },
   input: {
     height: 55,
@@ -167,12 +183,12 @@ const styles = StyleSheet.create({
   inputError: {
     borderColor: "#d73a4a",
   },
-  image: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
+  imagePickerContainer: {
+    alignItems: "center",
+    marginBottom: 15,
   },
   imagePicker: {
+    position: "relative",
     alignItems: "center",
     justifyContent: "center",
     width: 150,
@@ -181,6 +197,23 @@ const styles = StyleSheet.create({
     borderColor: "#A87544",
     borderWidth: 2,
     backgroundColor: "#f9f9f9",
+  },
+  image: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    borderColor: "#A87544", // Match imagePicker border color
+    borderWidth: 2,
+  },
+  cameraIconOverlay: {
+    position: "absolute",
+    bottom: 5,
+    right: 5,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    borderRadius: 20,
+    padding: 8,
+    borderWidth: 1.5,
+    borderColor: "white",
   },
   addImageText: {
     color: "#A87544",
@@ -199,10 +232,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 16,
-  },
-  imagePickerContainer: {
-    alignItems: "center",
-    marginBottom: 15,
   },
 });
 
