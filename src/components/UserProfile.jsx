@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
   signOutButtonText: {
     color: "white",
     fontWeight: "bold",
+    fontSize: 16,
   },
 });
 export default UserProfile;

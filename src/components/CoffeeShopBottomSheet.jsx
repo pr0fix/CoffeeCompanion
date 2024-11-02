@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   },
   photo: {
     width: "100%",
-    height: 200,
+    height: 300,
     borderRadius: 10,
     marginVertical: 5,
   },
@@ -252,6 +252,7 @@ const styles = StyleSheet.create({
   toggleReviewFormText: {
     color: "white",
     fontWeight: "bold",
+    fontSize: 16,
   },
   noAccessContainer: {
     alignItems: "center",

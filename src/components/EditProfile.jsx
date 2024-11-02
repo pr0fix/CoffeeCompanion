@@ -103,6 +103,7 @@ const EditProfile = ({ navigation }) => {
                 touched.fullName && errors.fullName ? styles.inputError : null,
               ]}
               placeholder="Full Name"
+              placeholderTextColor="#BDB3A0"
               onChangeText={handleChange("fullName")}
               onBlur={handleBlur("fullName")}
               value={values.fullName}
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 15,
     fontSize: 16,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#FFFFFF",
   },
   inputError: {
     borderColor: "#d73a4a",
@@ -197,6 +198,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     color: "white",
     fontWeight: "bold",
+    fontSize: 16,
   },
   imagePickerContainer: {
     alignItems: "center",
