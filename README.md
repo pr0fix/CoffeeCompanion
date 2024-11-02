@@ -65,13 +65,15 @@ Once the development server is running, you can scan the QR code displayed in th
 
 ## Screenshots
 
-#### Sign In, Sign Up & Form Validation
+#### Sign In & Sign Up
 <kbd><img src="screenshots/sign_in.png" alt="Sign In" height="auto" width="300px"/></kbd>
 <kbd><img src="screenshots/sign_up.png" alt="Sign Up" height="auto" width="300px"/></kbd>
-<kbd><img src="screenshots/example_form_validation.png" alt="Example Form Validation" height="auto" width="300px"/></kbd>
 
-#### Home Screen, Bottomsheet & Review Form
+#### Example Form Validation & Home Screen
+<kbd><img src="screenshots/example_form_validation.png" alt="Example Form Validation" height="auto" width="300px"/></kbd>
 <kbd><img src="screenshots/homepage.png" alt="Homepage" height="auto" width="300px"/></kbd>
+
+#### Bottomsheet & Review Form
 <kbd><img src="screenshots/bottomsheet.png" alt="Bottomsheet" height="auto" width="300px"/></kbd>
 <kbd><img src="screenshots/review_form.png" alt="Review Form" height="auto" width="300px"/></kbd>
 
