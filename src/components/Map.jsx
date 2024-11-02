@@ -7,6 +7,7 @@ import fetchCoffeeShops from "../api/fetchCoffeeShops";
 import fetchCoffeeShopPhotos from "../api/fetchCoffeeShopPhotos";
 import CoffeeShopBottomSheet from "./CoffeeShopBottomSheet";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { useNotification } from "../contexts/NotificationContext";
 
 // Removes any default POIs and markings that come with Google Maps
 const customMapStyle = [
@@ -79,6 +80,7 @@ const getCoffeeShopsWithPhotos = async (latitude, longitude) => {
 
 // Map component
 const Map = () => {
+  const { addNotification } = useNotification();
   const [region, setRegion] = useState(initialRegion);
   const [coffeeShops, setCoffeeShops] = useState([]);
   const [selectedShop, setSelectedShop] = useState(null);
@@ -130,6 +132,7 @@ const Map = () => {
         );
       } catch (err) {
         console.error("Error fetching location or coffee shops", err);
+        addNotification("Error fetching location or coffee shops", "error");
       }
     };
 
@@ -150,6 +153,30 @@ const Map = () => {
     }
   };
 
+  // Create markers for each coffee shop
+  const coffeeShopMarkers = coffeeShops.map((shop) => (
+    <Marker
+      key={shop.fsq_id}
+      coordinate={{
+        latitude: shop.geocodes.main.latitude,
+        longitude: shop.geocodes.main.longitude,
+      }}
+      title={shop.name}
+      description={shop.location.address || "No address available"}
+      onPress={() => handleMarkerPress(shop)}
+      tracksViewChanges={false}
+    >
+      <View style={styles.markerContainer}>
+        <Icon
+          name="coffee"
+          style={styles.markerIcon}
+          size={15}
+          color="#FFFFFF"
+        />
+      </View>
+    </Marker>
+  ));
+
   return (
     <SafeAreaView>
       <View>
@@ -163,27 +190,7 @@ const Map = () => {
           toolbarEnabled={false}
           clusterColor="#A87544"
         >
-          {coffeeShops.map((shop) => (
-            <Marker
-              key={shop.fsq_id}
-              coordinate={{
-                latitude: shop.geocodes.main.latitude,
-                longitude: shop.geocodes.main.longitude,
-              }}
-              title={shop.name}
-              description={shop.location.address || "No address available"}
-              onPress={() => handleMarkerPress(shop)}
-            >
-              <View style={styles.markerContainer}>
-                <Icon
-                  name="coffee"
-                  style={styles.markerIcon}
-                  size={15}
-                  color="#FFFFFF"
-                />
-              </View>
-            </Marker>
-          ))}
+          {coffeeShopMarkers}
         </MapView>
       </View>
       <CoffeeShopBottomSheet

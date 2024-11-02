@@ -151,10 +151,13 @@ const CoffeeShopBottomSheet = ({
       index={0}
       snapPoints={snapPoints}
       enablePanDownToClose={true}
+      keyboardBehavior="interactive"
+      keyboardBlurBehavior="restore"
+      backgroundStyle={styles.bottomSheet}
     >
       {selectedShop && (
         <>
-          <BottomSheetView style={styles.bottomSheetContent}>
+          <BottomSheetView style={styles.bottomSheetHeader}>
             <ShopHeader
               selectedShop={selectedShop}
               user={user}
@@ -185,7 +188,10 @@ const CoffeeShopBottomSheet = ({
 };
 
 const styles = StyleSheet.create({
-  bottomSheetContent: {
+  bottomSheet: {
+    backgroundColor: "#F4ECE3",
+  },
+  bottomSheetHeader: {
     padding: 20,
     alignItems: "center",
   },
@@ -195,6 +201,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 20,
     marginTop: 20,
+    color: "#6F3E37",
   },
   shopHeader: {
     flexDirection: "row",
@@ -204,19 +211,20 @@ const styles = StyleSheet.create({
   shopName: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "#6F3E37",
   },
   shopAddress: {
     fontSize: 16,
     fontStyle: "italic",
-    color: "gray",
+    color: "#A87544",
   },
   distance: {
     fontSize: 16,
-    color: "gray",
+    color: "#A87544",
   },
   photo: {
     width: "100%",
-    height: 200,
+    height: 300,
     borderRadius: 10,
     marginVertical: 5,
   },
@@ -224,6 +232,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     fontStyle: "italic",
     textAlign: "center",
+    color: "#BDB3A0",
   },
   buttonContainer: {
     marginTop: 20,
@@ -238,11 +247,12 @@ const styles = StyleSheet.create({
     width: 300,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: "#0366d6",
+    backgroundColor: "#A87544",
   },
   toggleReviewFormText: {
     color: "white",
     fontWeight: "bold",
+    fontSize: 16,
   },
   noAccessContainer: {
     alignItems: "center",
@@ -253,6 +263,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontStyle: "italic",
     marginVertical: 10,
+    color: "#BDB3A0",
   },
 });
 

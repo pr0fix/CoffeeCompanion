@@ -26,7 +26,7 @@ const UserProfile = ({ navigation }) => {
           style={styles.editButton}
           onPress={() => navigation.navigate("EditProfile")}
         >
-          <Text>Edit Profile</Text>
+          <Text style={styles.editButtonText}>Edit Profile</Text>
         </Pressable>
       ),
     });
@@ -38,7 +38,7 @@ const UserProfile = ({ navigation }) => {
   // Filter reviews and favorites by the current user
   const userReviews = reviews
     .filter((review) => review.userId === user.uid)
-    .sort((a, b) => b.createdAt - a.createdAt);
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   // Data for the user profile flatlist
   const data = [
@@ -66,7 +66,7 @@ const UserProfile = ({ navigation }) => {
       case "reviews":
         return item.data && item.data.length > 0 ? (
           <View style={styles.sectionContainer}>
-            <Text style={styles.dataHeader}>Your Reviews</Text>
+            <Text style={styles.dataHeader}>My Reviews</Text>
             <FlatList
               data={item.data}
               renderItem={({ item }) => <ReviewItem item={item} />}
@@ -80,7 +80,7 @@ const UserProfile = ({ navigation }) => {
       case "favorites":
         return item.data && item.data.length > 0 ? (
           <View style={styles.sectionContainer}>
-            <Text style={styles.dataHeader}>Your Favorites</Text>
+            <Text style={styles.dataHeader}>My Favorites</Text>
             <FlatList
               data={item.data}
               renderItem={({ item }) => (
@@ -113,71 +113,81 @@ const UserProfile = ({ navigation }) => {
       data={data}
       renderItem={renderItem}
       keyExtractor={(item, index) => `${item.type}-${index}`}
+      style={{ backgroundColor: "#F4ECE3" }}
       contentContainerStyle={styles.container}
+      initialNumToRender={3}
     />
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 20,
+    backgroundColor: "#F4ECE3",
+  },
   profileContainer: {
-    flex: 1,
     alignItems: "center",
+    paddingVertical: 30,
   },
   displayName: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
+    color: "#6F3E37",
     marginTop: 10,
   },
   email: {
     fontSize: 16,
-    color: "gray",
+    color: "#A87544",
+    marginTop: 5,
   },
   editButton: {
-    marginTop: 5,
-    marginRight: 5,
     padding: 10,
-    backgroundColor: "lightgrey",
-    borderRadius: 5,
+    marginRight: 5,
+    backgroundColor: "#A87544",
+    borderRadius: 8,
     alignItems: "center",
-    alignSelf: "flex-end",
+  },
+  editButtonText: {
+    color: "white",
+    fontWeight: "bold",
   },
   image: {
-    marginTop: 20,
     width: 150,
     height: 150,
-    borderColor: "gray",
-    borderWidth: 2,
     borderRadius: 75,
+    borderColor: "#A87544",
+    borderWidth: 2,
+  },
+  sectionContainer: {
+    marginTop: 10,
   },
   dataHeader: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
-    marginTop: 30,
-    marginLeft: 10,
-    alignSelf: "flex-start",
+    color: "#6F3E37",
+    marginBottom: 10,
+    paddingHorizontal: 10,
   },
   noDataHeader: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
-    marginTop: 20,
-    marginBottom: 20,
+    color: "#BDB3A0",
     textAlign: "center",
-  },
-  flatlist: {
-    width: "100%",
-    marginBottom: 20,
+    marginTop: 20,
   },
   signOutButton: {
-    marginTop: 5,
-    marginBottom: 5,
-    padding: 10,
+    marginVertical: 15,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
     backgroundColor: "#C70000",
-    borderRadius: 5,
+    borderRadius: 8,
+    alignItems: "center",
     alignSelf: "center",
   },
   signOutButtonText: {
     color: "white",
     fontWeight: "bold",
+    fontSize: 16,
   },
 });
 export default UserProfile;

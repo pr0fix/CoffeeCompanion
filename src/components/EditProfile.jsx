@@ -14,6 +14,7 @@ import { useUser } from "../contexts/UserContext";
 import { useNotification } from "../contexts/NotificationContext";
 import useEditProfile from "../hooks/useEditProfile";
 import * as ImagePicker from "expo-image-picker";
+import Icon from "@expo/vector-icons/MaterialIcons";
 
 // Validation schema for edit profile form
 const editProfileValidationSchema = yup.object().shape({
@@ -26,21 +27,25 @@ const editProfileValidationSchema = yup.object().shape({
 // Edit profile component
 const EditProfile = ({ navigation }) => {
   const { user } = useUser();
-  const { handleEditProfile, error, loading } = useEditProfile();
+  const { handleEditProfile, loading } = useEditProfile();
   const { addNotification } = useNotification();
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(user?.photoURL || null);
 
   // Handle image upload from device
   const handleImageUpload = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
 
-    if (!result.canceled) {
-      setProfileImage(result.assets[0].uri);
+      if (!result.canceled) {
+        setProfileImage(result.assets[0].uri);
+      }
+    } catch (err) {
+      addNotification("Image upload failed!", "error");
     }
   };
 
@@ -82,6 +87,29 @@ const EditProfile = ({ navigation }) => {
           touched,
         }) => (
           <View style={styles.form}>
+            <View style={styles.imagePickerContainer}>
+              <Pressable onPress={handleImageUpload} style={styles.imagePicker}>
+                {profileImage ? (
+                  <>
+                    <Image
+                      source={{ uri: profileImage }}
+                      style={styles.image}
+                    />
+                    <View style={styles.cameraIconOverlay}>
+                      <Icon name="camera-alt" size={24} color="white" />
+                    </View>
+                  </>
+                ) : (
+                  <>
+                    <Text style={styles.addImageText}>Add Image</Text>
+                    <View style={styles.cameraIconOverlay}>
+                      <Icon name="camera-alt" size={24} color="white" />
+                    </View>
+                  </>
+                )}
+              </Pressable>
+            </View>
+
             <Text style={styles.label}>Full Name</Text>
             <TextInput
               style={[
@@ -89,6 +117,7 @@ const EditProfile = ({ navigation }) => {
                 touched.fullName && errors.fullName ? styles.inputError : null,
               ]}
               placeholder="Full Name"
+              placeholderTextColor="#BDB3A0"
               onChangeText={handleChange("fullName")}
               onBlur={handleBlur("fullName")}
               value={values.fullName}
@@ -96,15 +125,6 @@ const EditProfile = ({ navigation }) => {
             {errors.fullName && touched.fullName && (
               <Text style={styles.error}>{errors.fullName}</Text>
             )}
-
-            <View style={styles.imagePickerContainer}>
-              {profileImage && (
-                <Image source={{ uri: profileImage }} style={styles.image} />
-              )}
-              <Pressable style={styles.imagePicker} onPress={handleImageUpload}>
-                <Text style={styles.submitButtonText}>Pick an image</Text>
-              </Pressable>
-            </View>
 
             <Pressable
               style={styles.submitButton}
@@ -120,7 +140,6 @@ const EditProfile = ({ navigation }) => {
           </View>
         )}
       </Formik>
-      {error ? <Text>{error}</Text> : null}
     </View>
   );
 };
@@ -128,59 +147,77 @@ const EditProfile = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    backgroundColor: "#F4ECE3",
   },
   form: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
+    backgroundColor: "white",
     padding: 20,
-    shadowColor: "#000",
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#E5D3C5",
+    shadowColor: "#6F3E37",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowRadius: 4,
+    elevation: 2,
     marginBottom: 20,
   },
   label: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 10,
-    color: "#333",
+    color: "#6F3E37",
   },
   input: {
-    height: 50,
-    borderColor: "#ccc",
+    height: 55,
+    borderColor: "#A87544",
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 8,
     paddingHorizontal: 15,
     marginBottom: 15,
     fontSize: 16,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#FFFFFF",
   },
   inputError: {
     borderColor: "#d73a4a",
   },
-  error: {
-    color: "#d73a4a",
-    marginBottom: 10,
-    fontSize: 14,
+  imagePickerContainer: {
+    alignItems: "center",
+    marginBottom: 15,
   },
   imagePicker: {
+    position: "relative",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: "#0366d6",
-    marginBottom: 15,
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    borderColor: "#A87544",
+    borderWidth: 2,
+    backgroundColor: "#f9f9f9",
   },
   image: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    marginBottom: 15,
-    alignSelf: "center",
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    borderColor: "#A87544", // Match imagePicker border color
+    borderWidth: 2,
+  },
+  cameraIconOverlay: {
+    position: "absolute",
+    bottom: 5,
+    right: 5,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    borderRadius: 20,
+    padding: 8,
+    borderWidth: 1.5,
+    borderColor: "white",
+  },
+  addImageText: {
+    color: "#A87544",
+    fontWeight: "bold",
   },
   submitButton: {
     alignItems: "center",
@@ -189,11 +226,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: "#008000",
+    backgroundColor: "#A87544",
   },
   submitButtonText: {
     color: "white",
     fontWeight: "bold",
+    fontSize: 16,
   },
 });
 

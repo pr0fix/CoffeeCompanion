@@ -63,6 +63,7 @@ const ReviewForm = ({ selectedShop, setReviewFormVisible }) => {
                   : null,
               ]}
               placeholder="Write your review here..."
+              placeholderTextColor="#BDB3A0"
               onChangeText={handleChange("reviewText")}
               onBlur={handleBlur("reviewText")}
               value={values.reviewText}
@@ -97,39 +98,53 @@ const styles = StyleSheet.create({
   formContainer: {
     marginTop: 20,
     marginBottom: 20,
-    marginHorizontal: 8,
+    marginHorizontal: 10,
   },
   input: {
     height: 60,
-    borderColor: "#ccc",
+    borderColor: "#A87544",
     borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    backgroundColor: "#FFFFFF",
     marginBottom: 15,
   },
   error: {
-    color: "#d73a4a",
+    color: "#D73A4A",
     marginBottom: 10,
   },
   inputError: {
-    borderColor: "#d73a4a",
+    borderColor: "#D73A4A",
+  },
+  addImageButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 8,
+    elevation: 3,
+    backgroundColor: "#A87544",
+    marginBottom: 15,
+  },
+  addImageButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
   },
   buttonContainer: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "center",
-    gap: 10,
+    justifyContent: "space-evenly",
   },
-
   submitButton: {
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 32,
     width: 180,
-    borderRadius: 4,
+    borderRadius: 8,
     elevation: 3,
-    backgroundColor: "#0366d6",
+    backgroundColor: "#A87544",
   },
   cancelButton: {
     alignItems: "center",
@@ -137,13 +152,14 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 32,
     width: 180,
-    borderRadius: 4,
+    borderRadius: 8,
     elevation: 3,
-    backgroundColor: "#C70000",
+    backgroundColor: "#6F3E37",
   },
   buttonText: {
     color: "white",
     fontWeight: "bold",
+    fontSize: 16,
   },
 });
 

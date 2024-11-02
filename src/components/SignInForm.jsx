@@ -33,109 +33,136 @@ const SignInForm = ({ navigation }) => {
   };
 
   return (
-    <View>
-      <Formik
-        validationSchema={signInValidationSchema}
-        initialValues={{ email: "", password: "" }}
-        onSubmit={(values) => onSubmit(values)}
-      >
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          touched,
-        }) => (
-          <View>
-            <TextInput
-              style={[
-                styles.input,
-                touched.email && errors.email ? styles.inputError : null,
-              ]}
-              placeholder="Email"
-              onChangeText={handleChange("email")}
-              onBlur={handleBlur("email")}
-              value={values.email}
-            />
-            {errors.email && touched.email && (
-              <Text style={styles.error}>{errors.email}</Text>
-            )}
-
-            <TextInput
-              style={[
-                styles.input,
-                touched.password && errors.password ? styles.inputError : null,
-              ]}
-              placeholder="Password"
-              secureTextEntry
-              onChangeText={handleChange("password")}
-              onBlur={handleBlur("password")}
-              value={values.password}
-            />
-            {errors.password && touched.password && (
-              <Text style={styles.error}>{errors.password}</Text>
-            )}
-
-            <Pressable style={styles.inputButton} onPress={handleSubmit}>
-              {loading ? (
-                <ActivityIndicator color="white" />
-              ) : (
-                <Text style={styles.inputButtonText}>Sign in</Text>
+    <View style={styles.screen}>
+      <Text style={styles.header}>
+        Welcome to CoffeeCompanion{"\n"}Please Sign In
+      </Text>
+      <View style={styles.container}>
+        <Formik
+          validationSchema={signInValidationSchema}
+          initialValues={{ email: "", password: "" }}
+          onSubmit={(values) => onSubmit(values)}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View>
+              <TextInput
+                style={[
+                  styles.input,
+                  touched.email && errors.email ? styles.inputError : null,
+                ]}
+                placeholder="Email"
+                placeholderTextColor="#BDB3A0"
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+              />
+              {errors.email && touched.email && (
+                <Text style={styles.error}>{errors.email}</Text>
               )}
-            </Pressable>
 
-            <Pressable
-              style={styles.signUpButton}
-              onPress={() => navigation.navigate("Sign Up")}
-            >
-              <Text style={styles.signUpButtonText}>
-                Don't have an account? Sign Up
-              </Text>
-            </Pressable>
-          </View>
-        )}
-      </Formik>
+              <TextInput
+                style={[
+                  styles.input,
+                  touched.password && errors.password
+                    ? styles.inputError
+                    : null,
+                ]}
+                placeholder="Password"
+                placeholderTextColor="#BDB3A0"
+                secureTextEntry
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
+              />
+              {errors.password && touched.password && (
+                <Text style={styles.error}>{errors.password}</Text>
+              )}
+
+              <Pressable style={styles.inputButton} onPress={handleSubmit}>
+                {loading ? (
+                  <ActivityIndicator color="#FFFFFF" />
+                ) : (
+                  <Text style={styles.inputButtonText}>Sign In</Text>
+                )}
+              </Pressable>
+
+              <Pressable
+                style={styles.signUpButton}
+                onPress={() => navigation.navigate("Sign Up")}
+              >
+                <Text style={styles.signUpButtonText}>
+                  Don't have an account? Sign Up
+                </Text>
+              </Pressable>
+            </View>
+          )}
+        </Formik>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  input: {
-    height: 60,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 15,
+  screen: {
+    flex: 1,
+    paddingHorizontal: 20,
+    backgroundColor: "#F4ECE3",
+    justifyContent: "center",
   },
-  error: {
-    color: "#d73a4a",
+  container: {
+    paddingVertical: 20,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#6F3E37",
+    lineHeight: 30,
+  },
+  input: {
+    height: 55,
+    borderColor: "#A87544",
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    backgroundColor: "#FFFFFF",
     marginBottom: 10,
   },
+  error: {
+    color: "#D73A4A",
+    marginBottom: 15,
+    paddingHorizontal: 5,
+  },
   inputError: {
-    borderColor: "#d73a4a",
+    borderColor: "#D73A4A",
   },
   inputButton: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: "#0366d6",
+    paddingVertical: 15,
+    borderRadius: 8,
+    backgroundColor: "#A87544",
+    marginTop: 10,
   },
   inputButtonText: {
     color: "white",
     fontWeight: "bold",
+    fontSize: 16,
   },
   signUpButton: {
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 25,
   },
   signUpButtonText: {
-    color: "#0366d6",
+    color: "#6F3E37",
     fontWeight: "bold",
   },
 });

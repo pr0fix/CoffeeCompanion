@@ -10,7 +10,7 @@ const useAddFavorite = () => {
   // Function to add a shop to favorites
   const handleAddFavorite = async (userId, shopId, shopName, address) => {
     setLoading(true);
-    setError(null);
+    setError("");
     try {
       await addFavorite(userId, shopId, shopName, address);
     } catch (err) {
@@ -23,7 +23,7 @@ const useAddFavorite = () => {
   // Function to remove a shop from favorites
   const handleRemoveFavorite = async (userId, shopId) => {
     setLoading(true);
-    setError(null);
+    setError("");
     try {
       await removeFavorite(userId, shopId);
     } catch (err) {

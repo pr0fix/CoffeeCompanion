@@ -1,14 +1,14 @@
+import { ActivityIndicator, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import SignInScreen from "../screens/SignInScreen";
 import HomeScreen from "../screens/HomeScreen";
 import SignUpScreen from "../screens/SignUpScreen";
-import Icon from "react-native-vector-icons/Ionicons";
 import UserProfileScreen from "../screens/UserProfileScreen";
-import { useUser } from "../contexts/UserContext";
 import EditProfileScreen from "../screens/EditProfileScreen";
-import { ActivityIndicator, View } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+import { useUser } from "../contexts/UserContext";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -20,9 +20,11 @@ const ProfileStack = () => {
       initialRouteName="Profile"
       screenOptions={{
         headerStyle: {
-          backgroundColor: "white",
-          elevation: 0,
-          shadowOpacity: 0,
+          backgroundColor: "#F4ECE3",
+        },
+        headerTintColor: "#6F3E37",
+        headerTitleStyle: {
+          fontWeight: "bold",
         },
       }}
     >
@@ -46,23 +48,11 @@ const AuthStack = () => {
     <Stack.Navigator
       initialRouteName="Sign In"
       screenOptions={{
-        headerStyle: {
-          backgroundColor: "white",
-          elevation: 0,
-          shadowOpacity: 0,
-        },
+        headerShown: false,
       }}
     >
-      <Stack.Screen
-        name="Sign In"
-        component={SignInScreen}
-        options={{ title: "Sign In" }}
-      />
-      <Stack.Screen
-        name="Sign Up"
-        component={SignUpScreen}
-        options={{ title: "Sign Up" }}
-      />
+      <Stack.Screen name="Sign In" component={SignInScreen} />
+      <Stack.Screen name="Sign Up" component={SignUpScreen} />
     </Stack.Navigator>
   );
 };
@@ -70,23 +60,47 @@ const AuthStack = () => {
 // Main bottom tabs navigator for authenticated users
 const AppTabs = () => {
   return (
-    <Tab.Navigator initialRouteName="Home">
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+
+          if (route.name === "Home") {
+            iconName = "home-outline";
+          } else if (route.name === "ProfileStack") {
+            iconName = "person-outline";
+          }
+
+          return <Icon name={iconName} color={color} size={size} />;
+        },
+        tabBarActiveTintColor: "#6F3E37",
+        tabBarInactiveTintColor: "#B3A394",
+        tabBarStyle: {
+          backgroundColor: "#F4ECE3",
+          height: 60,
+          paddingBottom: 10,
+          paddingTop: 5,
+          borderTopWidth: 0,
+        },
+        headerStyle: {
+          backgroundColor: "#F4ECE3",
+        },
+        headerTintColor: "#6F3E37",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+      })}
+    >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="home-outline" color={color} size={size} />
-          ),
-        }}
+        options={{ title: "Home" }}
       />
       <Tab.Screen
         name="ProfileStack"
         component={ProfileStack}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="person" color={color} size={size} />
-          ),
           headerShown: false,
           title: "Profile",
         }}

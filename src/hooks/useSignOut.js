@@ -12,7 +12,7 @@ const useSignOut = () => {
   // Function to handle user sign out
   const handleSignOut = async () => {
     setLoading(true);
-    setError(null);
+    setError("");
     try {
       await signout();
       addNotification("You have been signed out successfully!", "success");
