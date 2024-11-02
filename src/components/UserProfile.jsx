@@ -38,7 +38,7 @@ const UserProfile = ({ navigation }) => {
   // Filter reviews and favorites by the current user
   const userReviews = reviews
     .filter((review) => review.userId === user.uid)
-    .sort((a, b) => b.createdAt - a.createdAt);
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   // Data for the user profile flatlist
   const data = [

@@ -6,13 +6,15 @@ const ReviewItem = ({ item, shopSelected }) => {
 
   return (
     <View style={styles.reviewCard}>
-      <Text style={styles.shopName}>{item.shopName}</Text>
-      <Text style={styles.shopAddress}>{item.address}</Text>
-      <Text style={styles.reviewDate}>{formattedDate}</Text>
-      {shopSelected && (
-        <Text style={styles.username}>Reviewed by: {item.username}</Text>
-      )}
-      <Text style={styles.reviewText}>{item.text}</Text>
+      <View style={styles.reviewContent}>
+        <Text style={styles.shopName}>{item.shopName}</Text>
+        <Text style={styles.shopAddress}>{item.address}</Text>
+        <Text style={styles.reviewDate}>{formattedDate}</Text>
+        {shopSelected && (
+          <Text style={styles.username}>Reviewed by: {item.username}</Text>
+        )}
+        <Text style={styles.reviewText}>{item.text}</Text>
+      </View>
     </View>
   );
 };
@@ -20,41 +22,48 @@ const ReviewItem = ({ item, shopSelected }) => {
 const styles = StyleSheet.create({
   reviewCard: {
     margin: 10,
-    padding: 20,
-    backgroundColor: "#ffffff",
-    borderRadius: 10,
+    backgroundColor: "white",
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#ddd",
-    shadowColor: "#000",
+    borderColor: "#E5D3C5",
+    shadowColor: "#6F3E37",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 3,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  reviewContent: {
+    padding: 16,
   },
   shopName: {
-    fontWeight: "bold",
-    fontSize: 20,
-    marginBottom: 8,
-    color: "#333",
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#6F3E37",
+    marginBottom: 6,
+    letterSpacing: 0.3,
   },
   shopAddress: {
-    fontStyle: "italic",
-    color: "#777",
+    fontSize: 14,
+    color: "#A87544",
     marginBottom: 8,
+    fontStyle: "italic",
   },
   reviewDate: {
-    color: "#777",
+    fontSize: 13,
+    color: "#8B6B5D",
     marginBottom: 8,
+    fontStyle: "italic",
   },
   username: {
-    fontWeight: "bold",
-    color: "#333",
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#6F3E37",
     marginBottom: 8,
   },
   reviewText: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: "#555",
+    fontSize: 15,
+    lineHeight: 22,
+    color: "#6F3E37",
   },
 });
 

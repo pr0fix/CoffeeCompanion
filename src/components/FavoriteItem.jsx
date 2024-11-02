@@ -2,11 +2,9 @@ import { View, Text, StyleSheet } from "react-native";
 import useHandleFavorites from "../hooks/useHandleFavorites";
 import FavoriteButton from "./FavoriteButton";
 
-// Returns a favorite item card to be shown in list of favorites
 const FavoriteItem = ({ item, userId, favorites }) => {
   const { handleRemoveFavorite } = useHandleFavorites();
-
-  const isFavorite = favorites?.some((favorite) => favorite.id === item.id)
+  const isFavorite = favorites?.some((favorite) => favorite.id === item.id);
 
   const handleFavoriteButtonPress = async () => {
     await handleRemoveFavorite(userId, item.id);
@@ -19,7 +17,10 @@ const FavoriteItem = ({ item, userId, favorites }) => {
           <Text style={styles.shopName}>{item.shopName}</Text>
           <Text style={styles.shopAddress}>{item.address}</Text>
         </View>
-        <FavoriteButton onPress={handleFavoriteButtonPress} isFavorite={isFavorite}/>
+        <FavoriteButton
+          onPress={handleFavoriteButtonPress}
+          isFavorite={isFavorite}
+        />
       </View>
     </View>
   );
@@ -29,11 +30,11 @@ const styles = StyleSheet.create({
   favoriteCard: {
     margin: 10,
     padding: 20,
-    backgroundColor: "#ffffff",
+    backgroundColor: "white",
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#ddd",
-    shadowColor: "#000",
+    borderColor: "#E5D3C5",
+    shadowColor: "#6F3E37",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 5,
@@ -46,17 +47,21 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
+    marginRight: 10,
   },
   shopName: {
-    fontWeight: "bold",
-    fontSize: 20,
-    marginBottom: 8,
-    color: "#333",
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#6F3E37",
+    marginBottom: 6,
+    letterSpacing: 0.3,
   },
   shopAddress: {
+    fontSize: 14,
     fontStyle: "italic",
-    color: "#777",
-    marginBottom: 8,
+    color: "#A87544",
+    marginBottom: 4,
+    letterSpacing: 0.2,
   },
 });
 
