@@ -17,10 +17,12 @@ const FavoriteItem = ({ item, userId, favorites }) => {
           <Text style={styles.shopName}>{item.shopName}</Text>
           <Text style={styles.shopAddress}>{item.address}</Text>
         </View>
-        <FavoriteButton
-          onPress={handleFavoriteButtonPress}
-          isFavorite={isFavorite}
-        />
+        <View style={styles.buttonContainer}>
+          <FavoriteButton
+            onPress={handleFavoriteButtonPress}
+            isFavorite={isFavorite}
+          />
+        </View>
       </View>
     </View>
   );
@@ -62,6 +64,13 @@ const styles = StyleSheet.create({
     color: "#A87544",
     marginBottom: 4,
     letterSpacing: 0.2,
+  },
+  buttonContainer: {
+    width: 45,
+    paddingLeft: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    transform: [{ scale: 0.9 }],
   },
 });
 

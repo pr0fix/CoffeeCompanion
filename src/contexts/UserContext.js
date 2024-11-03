@@ -14,6 +14,7 @@ import {
   addToFavorites,
   removeFromFavorites,
   addProfilePicture,
+  removeReview,
 } from "../api/databaseService";
 
 // Create the context
@@ -123,10 +124,27 @@ export const UserProvider = ({ children }) => {
   // Handler function for adding a new review, which provides data to db-service function
   const addReviewHandler = async (shopId, shopName, address, reviewText) => {
     try {
-      await addReview(user, shopId, shopName, address, reviewText);
-      await getUserFavorites(user.uid, setFavorites);
+      const success = await addReview(
+        user,
+        shopId,
+        shopName,
+        address,
+        reviewText
+      );
+      if (success) getAllReviews(setReviews);
     } catch (error) {
       console.error("Error adding review:", error);
+    }
+  };
+
+  const removeReviewHandler = async (userId, reviewId) => {
+    try {
+      await removeReview(userId, reviewId);
+      getAllReviews(setReviews);
+      return true;
+    } catch (error) {
+      console.error("Error deleting review:", error);
+      return false;
     }
   };
 
@@ -161,6 +179,7 @@ export const UserProvider = ({ children }) => {
         signout,
         editProfile,
         addReview: addReviewHandler,
+        removeReview: removeReviewHandler,
         addFavorite: addFavoriteHandler,
         removeFavorite: removeFavoriteHandler,
       }}
