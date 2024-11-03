@@ -4,12 +4,12 @@ import BottomSheet, {
   BottomSheetFlatList,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-import ReviewForm from "./ReviewForm";
-import FavoriteButton from "./FavoriteButton";
 import { useUser } from "../contexts/UserContext";
-import ReviewItem from "./ReviewItem";
 import useHandleFavorites from "../hooks/useHandleFavorites";
 import formatDistance from "../utils/formatDistance";
+import ReviewForm from "./ReviewForm";
+import ReviewItem from "./ReviewItem";
+import FavoriteButton from "./FavoriteButton";
 
 // Renders the header for bottom sheet with shop name, address, distance and favorite button.
 const ShopHeader = ({

@@ -138,6 +138,7 @@ const Map = () => {
 
     fetchData();
 
+    // Clean up location subscription on unmount
     return () => {
       if (locationSubscription) {
         locationSubscription.remove();
@@ -177,6 +178,7 @@ const Map = () => {
     </Marker>
   ));
 
+  // Render the map with coffee shop markers and the bottom sheet
   return (
     <SafeAreaView>
       <View>

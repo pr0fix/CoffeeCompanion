@@ -1,6 +1,6 @@
 import axios from "axios";
-import { FOURSQUARE_BASE_URL, headers } from "./foursquareConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FOURSQUARE_BASE_URL, headers } from "./foursquareConfig";
 
 // Constants
 const CACHE_PREFIX = "photos_";

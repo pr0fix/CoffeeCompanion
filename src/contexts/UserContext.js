@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { auth } from "../api/firebaseConfig";
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
@@ -7,6 +6,7 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
+import { auth } from "../api/firebaseConfig";
 import {
   addReview,
   getAllReviews,
