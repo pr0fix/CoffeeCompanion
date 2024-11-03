@@ -66,7 +66,12 @@ const renderReviewItem = ({ item, user }) => {
         {user &&
           (item.data && item.data.length > 0 ? (
             item.data.map((review) => (
-              <ReviewItem item={review} key={review.id} shopSelected={true} />
+              <ReviewItem
+                item={review}
+                key={review.id}
+                shopSelected={true}
+                showRemove={false}
+              />
             ))
           ) : (
             <Text style={styles.noDataText}>
