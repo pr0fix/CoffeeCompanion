@@ -24,7 +24,7 @@ const signupValidationSchema = yup.object().shape({
   password: yup
     .string()
     .required("Password is required")
-    .min(5, "Password must be at least 5 characters long")
+    .min(6, "Password must be at least 6 characters long")
     .max(30, "Password must be at most 30 characters long"),
   passwordConfirm: yup
     .string()
