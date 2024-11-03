@@ -1,6 +1,6 @@
-import { getDownloadURL, uploadBytes } from "firebase/storage";
 import { database, storage } from "./firebaseConfig";
-import { onValue, push, ref, remove, set } from "firebase/database";
+import { getDownloadURL, uploadBytes } from "firebase/storage";
+import { onValue, push, ref, remove, set, get } from "firebase/database";
 import { ref as sRef } from "firebase/storage";
 
 // Function to add users profile picture to firebase storage
@@ -43,6 +43,21 @@ export const addReview = async (
     console.log("Review added successfully");
   } catch (error) {
     console.error("Error adding review:", error);
+  }
+};
+
+export const removeReview = async (userId, reviewId) => {
+  const reviewRef = ref(database, `reviews/${reviewId}`);
+
+  const snapshot = await get(reviewRef);
+  if (!snapshot.exists() || snapshot.val().userId !== userId) {
+    return;
+  }
+
+  try {
+    await remove(reviewRef);
+  } catch (error) {
+    console.error("Error deleting review:", error);
   }
 };
 

@@ -2,12 +2,12 @@ import { ActivityIndicator, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
+import Icon from "react-native-vector-icons/Ionicons";
 import SignInScreen from "../screens/SignInScreen";
 import HomeScreen from "../screens/HomeScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
-import Icon from "react-native-vector-icons/Ionicons";
 import { useUser } from "../contexts/UserContext";
 
 const Tab = createBottomTabNavigator();

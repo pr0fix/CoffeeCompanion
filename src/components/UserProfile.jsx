@@ -9,7 +9,9 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useUser } from "../contexts/UserContext";
+import { useNotification } from "../contexts/NotificationContext";
 import useSignOut from "../hooks/useSignOut";
+import useRemoveReview from "../hooks/useRemoveReview";
 import ReviewItem from "./ReviewItem";
 import FavoriteItem from "./FavoriteItem";
 
@@ -17,6 +19,8 @@ import FavoriteItem from "./FavoriteItem";
 const UserProfile = ({ navigation }) => {
   const { user, reviews, favorites, loading } = useUser();
   const { handleSignOut } = useSignOut();
+  const { handleRemoveReview } = useRemoveReview();
+  const { addNotification } = useNotification();
 
   // Sets the options for header so that the "Edit Profile" is placed in the rightmost side of the header bar
   useLayoutEffect(() => {
@@ -48,6 +52,24 @@ const UserProfile = ({ navigation }) => {
     { type: "signOut" },
   ];
 
+  const onRemovePress = async (reviewId) => {
+    if (!user || !user.uid) {
+      return;
+    }
+
+    try {
+      const removeSuccessful = await handleRemoveReview(user.uid, reviewId);
+      if (removeSuccessful) {
+        addNotification("Review removed successfully!", "success");
+      } else {
+        addNotification("Error removing review!", "error");
+      }
+    } catch (error) {
+      console.error("Error removing review:", error);
+      addNotification("Error removing review!", "error");
+    }
+  };
+
   // Render item switch for the flatlist
   const renderItem = ({ item }) => {
     switch (item.type) {
@@ -69,7 +91,13 @@ const UserProfile = ({ navigation }) => {
             <Text style={styles.dataHeader}>My Reviews</Text>
             <FlatList
               data={item.data}
-              renderItem={({ item }) => <ReviewItem item={item} />}
+              renderItem={({ item }) => (
+                <ReviewItem
+                  item={item}
+                  onRemovePress={onRemovePress}
+                  showRemove={true}
+                />
+              )}
               keyExtractor={(item) => item.id}
               scrollEnabled={false}
             />
