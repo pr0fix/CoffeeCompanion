@@ -7,8 +7,8 @@ import useRemoveReview from "../../hooks/useRemoveReview";
 import { useProfileSections } from "../../hooks/useProfileSections";
 import ProfileHeader from "./ProfileHeader";
 import CollapsibleSection from "./CollapsibleSection";
-import ReviewsList from "../ReviewsList";
-import FavoritesList from "./FavoritesList";
+import ReviewsList from "../Review/ReviewsList";
+import FavoritesList from "../Favorites/FavoritesList";
 import SignOutButton from "./SignOutButton";
 
 // User profile component

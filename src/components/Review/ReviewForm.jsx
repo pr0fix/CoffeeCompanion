@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import { Formik } from "formik";
 import * as yup from "yup";
-import useSubmitReview from "../hooks/useSubmitReview";
-import { useNotification } from "../contexts/NotificationContext";
+import useSubmitReview from "../../hooks/useSubmitReview";
+import { useNotification } from "../../contexts/NotificationContext";
 
 // Validation schema for review form
 const reviewValidationSchema = yup.object().shape({

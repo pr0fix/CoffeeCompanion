@@ -1,6 +1,6 @@
 import React from "react";
 import { View, FlatList, Text, StyleSheet } from "react-native";
-import FavoriteItem from "../FavoriteItem";
+import FavoriteItem from "./FavoriteItem";
 
 // Favorites list component
 const FavoritesList = ({ favorites, userId }) => {
