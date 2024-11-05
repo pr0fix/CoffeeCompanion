@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import EditProfile from "../components/EditProfile";
+import EditProfile from "../components/Profile/EditProfile";
 
 // Screen that renders the EditProfile component
 const EditProfileScreen = ({ navigation }) => {
