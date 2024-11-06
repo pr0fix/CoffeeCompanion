@@ -2,11 +2,16 @@ import React from "react";
 import { View, FlatList, Text, StyleSheet } from "react-native";
 import ReviewItem from "./ReviewItem";
 
-const ReviewsList = ({ reviews, onRemovePress }) => {
+const ReviewsList = ({
+  reviews,
+  onRemovePress,
+  shopSelected,
+  emptyMessage = "No reviews yet",
+}) => {
   if (!reviews.length) {
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>No reviews yet</Text>
+        <Text style={styles.emptyText}>{emptyMessage}</Text>
       </View>
     );
   }
@@ -17,8 +22,9 @@ const ReviewsList = ({ reviews, onRemovePress }) => {
       renderItem={({ item }) => (
         <ReviewItem
           item={item}
-          onRemovePress={() => onRemovePress(item.id)}
-          showRemove={true}
+          shopSelected={shopSelected}
+          onRemovePress={onRemovePress ? () => onRemovePress(item.id) : undefined}
+          showRemove={!!onRemovePress}
         />
       )}
       keyExtractor={(item) => item.id}

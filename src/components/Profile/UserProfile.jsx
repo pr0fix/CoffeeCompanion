@@ -13,7 +13,7 @@ import SignOutButton from "./SignOutButton";
 
 // User profile component
 const UserProfile = ({ navigation }) => {
-  const { user, reviews, favorites, loading, error } = useUser();
+  const { user, reviews, favorites, loading } = useUser();
   const { handleSignOut } = useSignOut();
   const { handleRemoveReview } = useRemoveReview();
   const { addNotification } = useNotification();
