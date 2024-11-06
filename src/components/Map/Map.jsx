@@ -3,11 +3,11 @@ import { Alert, Linking, SafeAreaView, StyleSheet, View } from "react-native";
 import { Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 import * as Location from "expo-location";
-import fetchCoffeeShops from "../api/fetchCoffeeShops";
-import fetchCoffeeShopPhotos from "../api/fetchCoffeeShopPhotos";
-import CoffeeShopBottomSheet from "./CoffeeShopBottomSheet";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { useNotification } from "../contexts/NotificationContext";
+import fetchCoffeeShops from "../../api/fetchCoffeeShops";
+import fetchCoffeeShopPhotos from "../../api/fetchCoffeeShopPhotos";
+import CoffeeShopBottomSheet from "./CoffeeShopBottomSheet";
+import { useNotification } from "../../contexts/NotificationContext";
 
 // Removes any default POIs and markings that come with Google Maps
 const customMapStyle = [

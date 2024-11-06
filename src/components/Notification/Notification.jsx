@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { useNotification } from "../contexts/NotificationContext";
+import { useNotification } from "../../contexts/NotificationContext";
 
 // Notification component
 const Notification = () => {

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import useHandleFavorites from "../hooks/useHandleFavorites";
+import useHandleFavorites from "../../hooks/useHandleFavorites";
 import FavoriteButton from "./FavoriteButton";
 
 const FavoriteItem = ({ item, userId, favorites }) => {

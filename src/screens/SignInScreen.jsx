@@ -1,4 +1,4 @@
-import SignInForm from "../components/SignInForm";
+import SignInForm from "../components/Auth/SignInForm";
 
 // Screen that renders the SignInForm component
 const SignInScreen = ({ navigation }) => {

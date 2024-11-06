@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import * as yup from "yup";
 import { Formik } from "formik";
-import useSignIn from "../hooks/useSignIn";
-import { useNotification } from "../contexts/NotificationContext";
+import useSignIn from "../../hooks/useSignIn";
+import { useNotification } from "../../contexts/NotificationContext";
 
 // Validator for fields in sign in form
 const signInValidationSchema = yup.object().shape({
