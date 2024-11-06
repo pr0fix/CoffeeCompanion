@@ -12,9 +12,9 @@ import * as yup from "yup";
 import { Formik } from "formik";
 import * as ImagePicker from "expo-image-picker";
 import Icon from "@expo/vector-icons/MaterialIcons";
-import { useUser } from "../contexts/UserContext";
-import { useNotification } from "../contexts/NotificationContext";
-import useEditProfile from "../hooks/useEditProfile";
+import { useUser } from "../../contexts/UserContext";
+import { useNotification } from "../../contexts/NotificationContext";
+import useEditProfile from "../../hooks/useEditProfile";
 
 // Validation schema for edit profile form
 const editProfileValidationSchema = yup.object().shape({
