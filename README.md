@@ -84,11 +84,38 @@ Once the development server is running, you can scan the QR code displayed in th
 ## Technologies Used
 
 CoffeeCompanion is built using the following technologies:
-- **Frontend**: React Native, Expo
-- **Location & Mapping**: Expo Location, Foursquare Places API, React Native Maps
-- **Authentication & Storage**: Firebase, Async Storage
-- **Forms & Validation**: Formik, Yup
-- **UI Components**: React Native Gesture Handler, React Native Bottom Sheet, React Native Vector Icons 
 
+- **Frontend**:
+  - React Native
+  - Expo
+  - Expo Image Picker
+
+- **Location & Mapping**:
+  - Expo Location
+  - Foursquare Places API
+  - React Native Maps
+  - React Native Map Clustering
+
+- **Authentication & Storage**:
+  - Firebase
+  - Async Storage
+
+- **Forms & Validation**:
+  - Formik
+  - Yup
+
+- **UI Components & Navigation**:
+  - React Native Gesture Handler
+  - React Native Reanimated
+  - React Native Bottom Sheet
+  - React Native Vector Icons
+  - React Native Collapsible
+  - React Navigation
+
+- **Networking**:
+  - Axios
+
+- **Configuration**:
+  - React Native Dotenv
 
 These technologies work together to create a seamless and efficient user experience in finding nearby coffee shops.

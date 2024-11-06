@@ -40,7 +40,6 @@ export const addReview = async (
       text: reviewText,
       createdAt: new Date().toISOString(),
     });
-    console.log("Review added successfully");
   } catch (error) {
     console.error("Error adding review:", error);
   }
