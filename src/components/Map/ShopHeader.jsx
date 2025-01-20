@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 import FavoriteButton from "../Favorites/FavoriteButton";
 import formatDistance from "../../utils/formatDistance";
+import { TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 // Renders the header for bottom sheet with shop name, address, distance and favorite button.
 const ShopHeader = ({
@@ -9,16 +11,27 @@ const ShopHeader = ({
   isFavorite,
   onPressFavoriteButton,
 }) => {
+  const navigation = useNavigation();
+
+  const onHeaderPress = () => {
+    navigation.navigate("ShopDetails")
+  };
+
   return (
     <View style={styles.shopHeader}>
       <View style={{ flex: 1 }}>
-        <Text style={styles.shopName}>{selectedShop.name}</Text>
-        <Text style={styles.shopAddress}>
-          {selectedShop.location.address || "No address available."}
-        </Text>
-        <Text style={styles.distance}>
-          {formatDistance(selectedShop.distance)}
-        </Text>
+        <TouchableOpacity
+          style={styles.pressableHeader}
+          onPress={onHeaderPress}
+        >
+          <Text style={styles.shopName}>{selectedShop.name}</Text>
+          <Text style={styles.shopAddress}>
+            {selectedShop.location.address || "No address available."}
+          </Text>
+          <Text style={styles.distance}>
+            {formatDistance(selectedShop.distance)}
+          </Text>
+        </TouchableOpacity>
       </View>
       {user && (
         <FavoriteButton
@@ -30,11 +43,14 @@ const ShopHeader = ({
   );
 };
 
-const styles = StyleSheet.create({  
-   shopHeader: {
+const styles = StyleSheet.create({
+  shopHeader: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 5,
+  },
+  pressableHeader: {
+    marginRight: "auto",
   },
   shopName: {
     fontSize: 20,

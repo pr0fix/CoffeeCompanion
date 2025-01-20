@@ -9,6 +9,7 @@ import SignUpScreen from "../screens/SignUpScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import { useUser } from "../contexts/UserContext";
+import ShopDetailsScreen from "../screens/ShopDetailsScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -57,16 +58,44 @@ const AuthStack = () => {
   );
 };
 
+const HomeStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#F4ECE3",
+        },
+        headerTintColor: "#6F3E37",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+      }}
+    >
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ title: "Home" }}
+      />
+      <Stack.Screen
+        name="ShopDetails"
+        component={ShopDetailsScreen}
+        options={{ title: "Shop Details" }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 // Main bottom tabs navigator for authenticated users
 const AppTabs = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="HomeStack"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           let iconName;
 
-          if (route.name === "Home") {
+          if (route.name === "HomeStack") {
             iconName = "home-outline";
           } else if (route.name === "ProfileStack") {
             iconName = "person-outline";
@@ -93,9 +122,9 @@ const AppTabs = () => {
       })}
     >
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{ title: "Home" }}
+        name="HomeStack"
+        component={HomeStack}
+        options={{ title: "Home", headerShown:false }}
       />
       <Tab.Screen
         name="ProfileStack"
