@@ -8,6 +8,10 @@ import fetchCoffeeShops from "../../api/fetchCoffeeShops";
 import fetchCoffeeShopPhotos from "../../api/fetchCoffeeShopPhotos";
 import CoffeeShopBottomSheet from "./CoffeeShopBottomSheet";
 import { useNotification } from "../../contexts/NotificationContext";
+import {
+  getUserLocation,
+  requestLocationPermission,
+} from "../../utils/getUserLocation";
 
 // Removes any default POIs and markings that come with Google Maps
 const customMapStyle = [
@@ -34,35 +38,6 @@ const initialRegion = {
   longitude: 24.941488,
   latitudeDelta: 0.0322,
   longitudeDelta: 0.0221,
-};
-
-// Request location permissions from the user
-const requestLocationPermission = async () => {
-  const { status } = await Location.requestForegroundPermissionsAsync();
-  if (status === "granted") {
-    return true;
-  }
-
-  if (status === "denied") {
-    Alert.alert(
-      "Location Access Required",
-      "Without location permissions, CoffeeCompanion won't be able to show nearby coffee shops on the map. Please enable location access in your settings.",
-      [
-        { text: "Cancel", style: "cancel" },
-        { text: "Open Settings", onPress: () => Linking.openSettings() },
-      ]
-    );
-  }
-  return false;
-};
-
-//  Get the user's current location
-const getUserLocation = async () => {
-  const location = await Location.getCurrentPositionAsync();
-  return {
-    latitude: location.coords.latitude,
-    longitude: location.coords.longitude,
-  };
 };
 
 // Fetch coffee shops with photos from the Foursquare API

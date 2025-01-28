@@ -14,7 +14,11 @@ const ShopHeader = ({
   const navigation = useNavigation();
 
   const onHeaderPress = () => {
-    navigation.navigate("ShopDetails")
+    if (selectedShop) {
+      navigation.navigate("ShopDetails", {
+        shop: selectedShop,
+      });
+    }
   };
 
   return (
